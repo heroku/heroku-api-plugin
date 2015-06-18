@@ -5,6 +5,6 @@ exports.topic = {
 };
 
 exports.commands = [
-  require('./commands/hello/world'),
-  require('./commands/hello/app')
+  require('./commands/world'),
+  require('./commands/app')
 ];
