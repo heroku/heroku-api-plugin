@@ -12,10 +12,12 @@ module.exports = {
   needsAuth: true,
   run: cli.command(function (context, heroku) {
     return co(function* () {
-      let app = yield heroku.apps(context.app).info();
-      cli.debug(app);
-      let config = yield heroku.apps(context.app).configVars().info();
-      cli.debug(config);
+      let res = yield {
+        app: heroku.apps(context.app).info(),
+        config: heroku.apps(context.app).configVars().info()
+      };
+      cli.debug(res.app);
+      cli.debug(res.config);
     });
   })
 };
