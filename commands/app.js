@@ -3,7 +3,7 @@
 let cli = require('heroku-cli-util');
 let co  = require('co');
 
-function *app (context, heroku) {
+function* app (context, heroku) {
   let res = yield {
     app:     heroku.apps(context.app).info(),
     config:  heroku.apps(context.app).configVars().info()
