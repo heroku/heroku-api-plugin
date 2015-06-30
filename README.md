@@ -14,8 +14,6 @@ $ heroku plugins:install heroku-api
 $ heroku api [--version VERSION] METHOD PATH
 ```
 
-   -v, --version VERSION # version to use (e.g. 2, 3, or 3.variant)
-
   The api command is a convenient but low-level way to send requests
   to the Heroku API. It sends an HTTP request to the Heroku API
   using the given method on the given path. For methods PUT, PATCH,
@@ -33,6 +31,9 @@ $ heroku api [--version VERSION] METHOD PATH
         name: "myapp",
         …
       }
+
+      $ heroku api -v 3.variant /apps
+      # Something different
 
       $ export HEROKU_HEADERS
       $ HEROKU_HEADERS='
