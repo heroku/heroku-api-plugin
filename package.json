@@ -1,5 +1,5 @@
 {
-  "name": "heroku-api",
+  "name": "heroku-cli-api",
   "description": "access the Heroku API directly",
   "version": "0.1.0",
   "author": "Mark Pundsack @markpundsack",
