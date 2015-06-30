@@ -1,10 +1,8 @@
 exports.topic = {
-  name: 'hello',
-  // this is the help text that shows up under `heroku help`
-  description: 'a topic for the hello world plugin'
+  name: 'api',
+  description: 'call the Heroku API directly'
 };
 
 exports.commands = [
-  require('./commands/world'),
-  require('./commands/app')
+  require('./commands/api')
 ];
