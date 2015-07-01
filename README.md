@@ -1,11 +1,11 @@
-# API Plugin for Heroku Toolbelt [![Circle CI](https://circleci.com/gh/heroku/heroku-cli-api/tree/master.svg?style=svg)](https://circleci.com/gh/heroku/heroku-cli-api/tree/master)
+# API Plugin for Heroku Toolbelt [![Circle CI](https://circleci.com/gh/heroku/heroku-api-plugin/tree/master.svg?style=svg)](https://circleci.com/gh/heroku/heroku-api-plugin/tree/master)
 
-[![npm version](https://badge.fury.io/js/heroku-cli-api.svg)](http://badge.fury.io/js/heroku-cli-api)
+[![npm version](https://badge.fury.io/js/heroku-api-plugin.svg)](http://badge.fury.io/js/heroku-api-plugin)
 
 ## How to install this plugin
 
 ```
-$ heroku plugins:install heroku-cli-api
+$ heroku plugins:install heroku-api-plugin
 ```
 
 ## Usage

@@ -1,11 +1,11 @@
 {
-  "name": "heroku-cli-api",
+  "name": "heroku-api-plugin",
   "description": "access the Heroku API directly",
   "version": "0.1.0",
   "author": "Mark Pundsack @markpundsack",
   "repository": "heroku/api",
   "bugs": {
-    "url": "https://github.com/heroku/api/issues"
+    "url": "https://github.com/heroku/heroku-api-plugin/issues"
   },
   "keywords": [
     "heroku-plugin"
