@@ -3,6 +3,17 @@
 let cli = require('heroku-cli-util');
 let fs  = require("co-fs");
 
+function highlight(response) {
+  let json = JSON.stringify(response, null, '\t');
+  if (process.stdout.isTTY) {
+    let cardinal = require("cardinal");
+    let theme = require("cardinal/themes/tomorrow-night");
+    return cardinal.highlight(json, { json: true, theme: theme });
+  } else {
+    return json;
+  }
+}
+
 module.exports = {
   topic: 'api',
   description: 'make a single API request',
@@ -52,6 +63,6 @@ Examples:
       request.body = yield fs.readFile('/dev/stdin', 'utf8');
     }
     let response = yield heroku.request(request);
-    cli.log(response);
+    cli.log(highlight(response));
   })
 };
