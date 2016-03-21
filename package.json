@@ -18,10 +18,9 @@
     "postversion": "npm publish && git push && git push --tags"
   },
   "dependencies": {
-    "cardinal": "0.6.0",
     "co": "^4.5.4",
     "co-fs": "^1.2.0",
-    "heroku-cli-util": "^5.2.1"
+    "heroku-cli-util": "5.8.4"
   },
   "devDependencies": {
     "chai": "^3.0.0",
