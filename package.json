@@ -13,7 +13,9 @@
   "license": "ISC",
   "main": "index.js",
   "scripts": {
-    "test": "mocha && jshint ."
+    "test": "mocha && jshint .",
+    "preversion": "npm test",
+    "postversion": "npm publish && git push && git push --tags"
   },
   "dependencies": {
     "co": "^4.5.4",
