@@ -59,7 +59,7 @@ Examples:
     request.path = context.args.path;
     let version = context.flags.version || "3";
     request.headers = { 'Accept': `application/vnd.heroku+json; version=${version}` };
-    if (request.method == "PATCH" || request.method == "PUT" || request.method == "POST") {
+    if (request.method === "PATCH" || request.method === "PUT" || request.method === "POST") {
       request.body = yield fs.readFile('/dev/stdin', 'utf8');
     }
     let response = yield heroku.request(request);
