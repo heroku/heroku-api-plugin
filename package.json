@@ -3,7 +3,7 @@
   "description": "access the Heroku API directly",
   "version": "0.2.0",
   "author": "Mark Pundsack @markpundsack",
-  "repository": "heroku/api",
+  "repository": "heroku/heroku-api-plugin",
   "bugs": {
     "url": "https://github.com/heroku/heroku-api-plugin/issues"
   },
