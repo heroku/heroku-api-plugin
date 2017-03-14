@@ -40,14 +40,19 @@ Examples:
     {name: 'path', description: 'endpoint to call', optional: false}
   ],
   flags: [
-    {name: 'version', char: 'v', description: 'version to use (e.g. 2, 3, or 3.variant)', hasValue: true}
+    {name: 'version', char: 'v', description: 'version to use (e.g. 2, 3, or 3.variant)', hasValue: true},
+    {name: 'accept-inclusion', char: 'a', description: 'Accept-Inclusion header to use', hasValue: true}
   ],
   run: cli.command(function* (context, heroku) {
     let request = {};
     request.method = context.args.method.toUpperCase();
     request.path = context.args.path;
     let version = context.flags.version || "3";
-    request.headers = { 'Accept': `application/vnd.heroku+json; version=${version}` };
+    let headers = { 'Accept': `application/vnd.heroku+json; version=${version}` };
+    if ('accept-inclusion' in context.flags) {
+      headers['Accept-Inclusion'] = context.flags['accept-inclusion']
+    }
+    request.headers = headers
     if (request.method === "PATCH" || request.method === "PUT" || request.method === "POST") {
       let body = yield fs.readFile('/dev/stdin', 'utf8');
       let parsedBody;
