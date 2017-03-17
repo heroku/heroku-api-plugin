@@ -1,7 +1,7 @@
 {
   "name": "heroku-api-plugin",
   "description": "access the Heroku API directly",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "author": "Mark Pundsack @markpundsack",
   "repository": "heroku/heroku-api-plugin",
   "bugs": {
