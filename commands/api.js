@@ -49,7 +49,14 @@ Examples:
     let version = context.flags.version || "3";
     request.headers = { 'Accept': `application/vnd.heroku+json; version=${version}` };
     if (request.method === "PATCH" || request.method === "PUT" || request.method === "POST") {
-      request.body = yield fs.readFile('/dev/stdin', 'utf8');
+      let body = yield fs.readFile('/dev/stdin', 'utf8')
+      let parsedBody
+      try {
+        parsedBody = JSON.parse(body)
+      } catch(e) {
+        throw new Error("Request body must be valid JSON")
+      }
+      request.body = parsedBody
     }
     let response = yield heroku.request(request);
 
