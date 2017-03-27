@@ -50,9 +50,9 @@ Examples:
     let version = context.flags.version || "3";
     let headers = { 'Accept': `application/vnd.heroku+json; version=${version}` };
     if ('accept-inclusion' in context.flags) {
-      headers['Accept-Inclusion'] = context.flags['accept-inclusion']
+      headers['Accept-Inclusion'] = context.flags['accept-inclusion'];
     }
-    request.headers = headers
+    request.headers = headers;
     if (request.method === "PATCH" || request.method === "PUT" || request.method === "POST") {
       let body = yield fs.readFile('/dev/stdin', 'utf8');
       let parsedBody;
