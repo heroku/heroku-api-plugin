@@ -6,7 +6,6 @@ let fs  = require("co-fs");
 module.exports = {
   topic: 'api',
   description: 'make a single API request',
-  default: true,
   help: `The api command is a convenient but low-level way to send requests
 to the Heroku API. It sends an HTTP request to the Heroku API
 using the given method on the given path. For methods PUT, PATCH,
