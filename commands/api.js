@@ -48,7 +48,7 @@ Examples:
     request.path = context.args.path;
     let version = context.flags.version || "3";
     let headers = { 'Accept': `application/vnd.heroku+json; version=${version}` };
-    if ('accept-inclusion' in context.flags) {
+    if (context.flags['accept-inclusion'] !== undefined) {
       headers['Accept-Inclusion'] = context.flags['accept-inclusion'];
     }
     request.headers = headers;
