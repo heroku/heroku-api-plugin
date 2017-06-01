@@ -45,7 +45,8 @@ Examples:
   run: cli.command(function* (context, heroku) {
     let request = {};
     request.method = context.args.method.toUpperCase();
-    request.path = context.args.path;
+    const path = context.args.path;
+    request.path = path.startsWith('/') ? path : `/${path}`;
     let version = context.flags.version || "3";
     let headers = { 'Accept': `application/vnd.heroku+json; version=${version}` };
     if (context.flags['accept-inclusion'] !== undefined) {
