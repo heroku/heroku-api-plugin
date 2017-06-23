@@ -1,7 +1,8 @@
-'use strict';
+'use strict'
 
-let cli = require('heroku-cli-util');
-let fs  = require("co-fs");
+const cli = require('heroku-cli-util')
+const fs = require('co-fs')
+const {inspect} = require('util')
 
 module.exports = {
   topic: 'api',
@@ -35,38 +36,45 @@ Examples:
   needsApp: false,
   needsAuth: true,
   args: [
-    {name: 'method', description: 'GET, POST, PUT, PATCH, or DELETE', optional: false},
-    {name: 'path', description: 'endpoint to call', optional: false}
+    {name: 'method', description: 'GET, POST, PUT, PATCH, or DELETE'},
+    {name: 'path', description: 'endpoint to call', optional: true}
   ],
   flags: [
     {name: 'version', char: 'v', description: 'version to use (e.g. 2, 3, or 3.variant)', hasValue: true},
     {name: 'accept-inclusion', char: 'a', description: 'Accept-Inclusion header to use', hasValue: true}
   ],
-  run: cli.command(function* (context, heroku) {
-    let request = {};
-    request.method = context.args.method.toUpperCase();
-    request.path = context.args.path;
-    let version = context.flags.version || "3";
-    let headers = { 'Accept': `application/vnd.heroku+json; version=${version}` };
-    if (context.flags['accept-inclusion'] !== undefined) {
-      headers['Accept-Inclusion'] = context.flags['accept-inclusion'];
+  run: cli.command(async function (context, heroku) {
+    let request = {}
+    request.path = context.args.path
+    request.method = context.args.method
+    if (!request.path) {
+      request.path = request.method
+      request.method = 'GET'
     }
-    request.headers = headers;
-    if (request.method === "PATCH" || request.method === "PUT" || request.method === "POST") {
-      let body = yield fs.readFile('/dev/stdin', 'utf8');
-      let parsedBody;
+    request.method = request.method.toUpperCase()
+    let version = context.flags.version || '3'
+    request.headers = { 'Accept': `application/vnd.heroku+json; version=${version}` }
+    if (context.flags['accept-inclusion']) {
+      request.headers['Accept-Inclusion'] = context.flags['accept-inclusion']
+    }
+    if (request.method === 'PATCH' || request.method === 'PUT' || request.method === 'POST') {
+      let body = await fs.readFile('/dev/stdin', 'utf8')
+      let parsedBody
       try {
-        parsedBody = JSON.parse(body);
-      } catch(e) {
-        throw new Error("Request body must be valid JSON");
+        parsedBody = JSON.parse(body)
+      } catch (e) {
+        throw new Error('Request body must be valid JSON')
       }
-      request.body = parsedBody;
+      request.body = parsedBody
     }
-    let response = yield heroku.request(request);
+    let response
+    try {
+      response = await heroku.request(request)
+    } catch (err) {
+      if (!err.statusCode) throw err
+      throw new Error(`HTTP: ${err.statusCode} ${request.path}\n${inspect(err.body)}`)
+    }
 
-    if (typeof response === "object")
-      cli.styledJSON(response);
-    else
-      cli.log(response);
+    if (typeof response === 'object') { cli.styledJSON(response) } else { cli.log(response) }
   })
-};
+}

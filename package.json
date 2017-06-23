@@ -2,32 +2,35 @@
   "name": "heroku-api-plugin",
   "description": "access the Heroku API directly",
   "version": "1.1.2",
-  "author": "Mark Pundsack @markpundsack",
-  "repository": "heroku/heroku-api-plugin",
+  "author": "Jeff Dickey @dickeyxxx",
   "bugs": {
     "url": "https://github.com/heroku/heroku-api-plugin/issues"
+  },
+  "dependencies": {
+    "co": "^4.5.4",
+    "co-fs": "^1.2.0",
+    "heroku-cli-util": "^6.2.0"
+  },
+  "devDependencies": {
+    "chai": "^4.0.2",
+    "mocha": "^3.4.2",
+    "nock": "^9.0.13",
+    "sinon": "^2.3.5",
+    "sinon-chai": "^2.8.0",
+    "standard": "^10.0.2"
   },
   "keywords": [
     "heroku-plugin"
   ],
   "license": "ISC",
   "main": "index.js",
+  "repository": "heroku/heroku-api-plugin",
   "scripts": {
-    "test": "mocha && jshint .",
+    "postversion": "npm publish && git push && git push --tags",
     "preversion": "npm test",
-    "postversion": "npm publish && git push && git push --tags"
+    "test": "mocha && standard"
   },
-  "dependencies": {
-    "co": "^4.5.4",
-    "co-fs": "^1.2.0",
-    "heroku-cli-util": "5.8.4"
-  },
-  "devDependencies": {
-    "chai": "^3.0.0",
-    "jshint": "*",
-    "mocha": "^2.2.5",
-    "nock": "^2.5.0",
-    "sinon": "^1.15.3",
-    "sinon-chai": "^2.8.0"
+  "standard": {
+    "env": "jest"
   }
 }
