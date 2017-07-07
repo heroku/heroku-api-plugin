@@ -36,6 +36,18 @@ test('--version=v3.foobar', async () => {
   expect(stdout).toEqual('hello!\n')
 })
 
+test('--accept-inclusion=foobar', async () => {
+  api = nock('https://api.heroku.com', {
+    reqheaders: {'Accept-Inclusion': 'foobar'}
+  })
+  api
+    .get('/hello')
+    .reply(200, 'hello!')
+  let cmd = await API.mock('/hello', '--accept-inclusion=foobar')
+  let stdout = cmd.out.stdout.output
+  expect(stdout).toEqual('hello!\n')
+})
+
 describe('404', () => {
   beforeEach(() => {
     api
