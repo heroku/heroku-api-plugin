@@ -2,10 +2,12 @@
 version: 2
 jobs:
   build:
-    working_directory: ~/heroku
     docker:
       - image: dickeyxxx/cli-engine-docker:v1.3.1
+    working_directory: ~/cli-plugin
     steps:
       - checkout
       - run: yarn
-      - run: yarn test
+      - run: jest --coverage && bash <(curl -s https://codecov.io/bash)
+      - run: flow check
+      - run: eslint .
