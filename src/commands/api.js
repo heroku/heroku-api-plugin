@@ -3,14 +3,14 @@
 import type {HTTPRequestOptions} from 'http-call'
 import {Command, flags} from 'cli-engine-heroku'
 import {inspect} from 'util'
-import getStdin from 'get-stdin'
 
 export default class API extends Command {
   static topic = 'api'
   static description = 'make a manual API request'
   static flags = {
     version: flags.string({char: 'v', description: 'version to use (e.g. 2, 3, or 3.variant)'}),
-    'accept-inclusion': flags.string({char: 'a', description: 'Accept-Inclusion header to use'})
+    'accept-inclusion': flags.string({char: 'a', description: 'Accept-Inclusion header to use'}),
+    body: flags.string({char: 'b', description: 'JSON input body'})
   }
   static args = [
     {name: 'method', description: 'GET, POST, PUT, PATCH, or DELETE'},
@@ -31,9 +31,16 @@ Method name input will be upcased, so both 'heroku api GET /apps' and
 Examples:
 
     $ heroku api GET /apps/myapp
-    { created_at: "2011-11-11T04:17:13-00:00",
+    {
+      created_at: "2011-11-11T04:17:13-00:00",
       id: "12345678-9abc-def0-1234-456789012345",
       name: "myapp",
+      …
+    }
+
+    $ heroku api POST /apps/myapp/ps/scale --body '{"FOO": "bar"}'
+    {
+      FOO: "bar"
       …
     }
 
@@ -62,15 +69,7 @@ Examples:
       request.headers['Accept-Inclusion'] = this.flags['accept-inclusion']
     }
     if (request.method === 'PATCH' || request.method === 'PUT' || request.method === 'POST') {
-      let body = await getStdin()
-      if (!body) this.out.warn('no stdin provided')
-      else {
-        try {
-          request.body = JSON.parse(body)
-        } catch (e) {
-          throw new Error('Request body must be valid JSON')
-        }
-      }
+      request.body = await this.getBody()
     }
     let response
     try {
@@ -84,6 +83,28 @@ Examples:
       this.out.styledJSON(response.body)
     } else {
       this.out.log(response.body)
+    }
+  }
+
+  async getBody (): Promise<?string> {
+    const getStdin = require('get-stdin')
+    const edit = require('edit-string')
+
+    let body = this.flags.body || await getStdin()
+    if (!body) {
+      this.out.warn('no stdin provided')
+      return
+    }
+    try {
+      return JSON.parse(body)
+    } catch (e) {
+      let err = new Error(`Request body must be valid JSON
+Received:
+${inspect(body)}`)
+      if (process.stdin.isTTY) {
+        this.out.warn(err)
+        return JSON.parse(await edit(body))
+      } else throw new Error(err)
     }
   }
 }

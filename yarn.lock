@@ -837,6 +837,12 @@ ecc-jsbn@~0.1.1:
   dependencies:
     jsbn "~0.1.0"
 
+edit-string@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/edit-string/-/edit-string-1.0.1.tgz#2b054d550cbb6e9d92e217924b2ee38ac7646ce4"
+  dependencies:
+    tmp "^0.0.31"
+
 errno@^0.1.4:
   version "0.1.4"
   resolved "https://registry.yarnpkg.com/errno/-/errno-0.1.4.tgz#b896e23a9e5e8ba33871fc996abd3635fc9a1c7d"
@@ -1171,7 +1177,7 @@ form-data@~2.1.1:
     combined-stream "^1.0.5"
     mime-types "^2.1.12"
 
-fs-extra@3.x:
+fs-extra@3.x, fs-extra@^3.0.1:
   version "3.0.1"
   resolved "https://registry.yarnpkg.com/fs-extra/-/fs-extra-3.0.1.tgz#3794f378c58b342ea7dbbb23095109c4b3b62291"
   dependencies:
