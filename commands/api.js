@@ -1,8 +1,25 @@
 'use strict'
 
 const cli = require('heroku-cli-util')
-const fs = require('fs')
 const {inspect} = require('util')
+
+function readStdin () {
+  return new Promise(function (resolve, reject) {
+    let buffer = ''
+    process.stdin.setEncoding('utf8')
+
+    process.stdin.on('readable', () => {
+      const chunk = process.stdin.read()
+      if (chunk !== null) {
+        buffer += chunk
+      }
+    })
+
+    process.stdin.on('end', () => {
+      resolve(buffer)
+    })
+  })
+}
 
 module.exports = {
   topic: 'api',
@@ -58,12 +75,12 @@ Examples:
       request.headers['Accept-Inclusion'] = context.flags['accept-inclusion']
     }
     if (request.method === 'PATCH' || request.method === 'PUT' || request.method === 'POST') {
-      let body = fs.readFileSync('/dev/stdin', 'utf8')
+      let body = await readStdin()
       let parsedBody
       try {
         parsedBody = JSON.parse(body)
       } catch (e) {
-        throw new Error('Request body must be valid JSON')
+        throw new Error('Request body must be valid JSON: ' + e.message)
       }
       request.body = parsedBody
     }
