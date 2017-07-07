@@ -38,7 +38,7 @@ Examples:
       …
     }
 
-    $ heroku api POST /apps/myapp/ps/scale --body '{"FOO": "bar"}'
+    $ heroku api PATCH /apps/myapp/config-vars --body '{"FOO": "bar"}'
     {
       FOO: "bar"
       …
