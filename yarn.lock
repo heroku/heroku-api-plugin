@@ -838,8 +838,8 @@ ecc-jsbn@~0.1.1:
     jsbn "~0.1.0"
 
 edit-string@^1.0.1:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/edit-string/-/edit-string-1.0.1.tgz#2b054d550cbb6e9d92e217924b2ee38ac7646ce4"
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/edit-string/-/edit-string-1.1.0.tgz#113ba14c6f338b09abdb3c2f92bddf2cdbd7c51f"
   dependencies:
     tmp "^0.0.31"
 
