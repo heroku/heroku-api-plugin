@@ -1,7 +1,7 @@
 'use strict'
 
 const cli = require('heroku-cli-util')
-const fs = require('co-fs')
+const fs = require('fs')
 const {inspect} = require('util')
 
 module.exports = {
@@ -58,7 +58,7 @@ Examples:
       request.headers['Accept-Inclusion'] = context.flags['accept-inclusion']
     }
     if (request.method === 'PATCH' || request.method === 'PUT' || request.method === 'POST') {
-      let body = await fs.readFile('/dev/stdin', 'utf8')
+      let body = fs.readFileSync('/dev/stdin', 'utf8')
       let parsedBody
       try {
         parsedBody = JSON.parse(body)
