@@ -100,6 +100,8 @@ describe('stdin', () => {
 
   it('POST', async () => {
     // $FlowFixMe
+    let tty = process.stdin.isTTY
+    // $FlowFixMe
     process.stdin.isTTY = false
     process.nextTick(() => {
       process.stdin.push('{"FOO": "bar"}')
@@ -108,6 +110,8 @@ describe('stdin', () => {
     let cmd = await API.mock('POST', '/apps')
     let app = JSON.parse(cmd.out.stdout.output)
     expect(app).toMatchObject({name: 'myapp'})
+    // $FlowFixMe
+    process.stdin.isTTY = tty
   })
 })
 
