@@ -15,6 +15,27 @@ afterEach(() => {
   api.done()
 })
 
+test('receiving string', async () => {
+  api
+    .get('/hello')
+    .reply(200, 'hello!')
+  let cmd = await API.mock('/hello')
+  let stdout = cmd.out.stdout.output
+  expect(stdout).toEqual('hello!\n')
+})
+
+test('--version=v3.foobar', async () => {
+  api = nock('https://api.heroku.com', {
+    reqheaders: {accept: 'application/vnd.heroku+json; version=3.foobar'}
+  })
+  api
+    .get('/hello')
+    .reply(200, 'hello!')
+  let cmd = await API.mock('/hello', '--version=3.foobar')
+  let stdout = cmd.out.stdout.output
+  expect(stdout).toEqual('hello!\n')
+})
+
 describe('404', () => {
   beforeEach(() => {
     api
