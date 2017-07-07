@@ -58,10 +58,10 @@ describe('GET /apps', () => {
   })
 })
 
-describe('POST /apps', () => {
+describe('stdin', () => {
   beforeEach(() => {
     api
-      .post('/apps')
+      .post('/apps', {FOO: 'bar'})
       .reply(201, {name: 'myapp'})
   })
 
@@ -73,6 +73,20 @@ describe('POST /apps', () => {
       process.stdin.emit('end')
     })
     let cmd = await API.mock('POST', '/apps')
+    let app = JSON.parse(cmd.out.stdout.output)
+    expect(app).toMatchObject({name: 'myapp'})
+  })
+})
+
+describe('--body', () => {
+  beforeEach(() => {
+    api
+      .post('/apps', {FOO: 'bar'})
+      .reply(201, {name: 'myapp'})
+  })
+
+  it('POST', async () => {
+    let cmd = await API.mock('POST', '/apps', '--body', '{"FOO": "bar"}')
     let app = JSON.parse(cmd.out.stdout.output)
     expect(app).toMatchObject({name: 'myapp'})
   })
