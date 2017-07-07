@@ -60,7 +60,7 @@ describe('404', () => {
     try {
       await API.mock('/uhoh')
     } catch (err) {
-      expect(err.message).toEqual("HTTP: 404 /uhoh\n'uhoh!'")
+      expect(err.message).toEqual('HTTP Error 404 for GET https://api.heroku.com:443/uhoh\nuhoh!')
     }
   })
 })

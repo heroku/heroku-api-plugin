@@ -3,6 +3,7 @@
 import type {HTTPRequestOptions} from 'http-call'
 import {Command, flags} from 'cli-engine-heroku'
 import {inspect} from 'util'
+import color from 'heroku-cli-color'
 
 export default class API extends Command {
   static topic = 'api'
@@ -71,13 +72,16 @@ Examples:
     if (request.method === 'PATCH' || request.method === 'PUT' || request.method === 'POST') {
       request.body = await this.getBody()
     }
+    this.out.action.start(color`{cyanBright ${request.method}} ${this.heroku.host}${path}`)
     let response
     try {
       response = await this.heroku.request(path, request)
     } catch (err) {
-      if (!err.statusCode) throw err
-      throw new Error(`HTTP: ${err.statusCode} ${path}\n${inspect(err.body)}`)
+      if (!err.http || !err.http.statusCode) throw err
+      this.out.action.stop(color`{redBright ${err.http.statusCode}}`)
+      throw err
     }
+    this.out.action.stop(color`{greenBright ${response.response.statusCode}}`)
 
     if (typeof response.body === 'object') {
       this.out.styledJSON(response.body)
