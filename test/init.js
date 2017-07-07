@@ -6,3 +6,6 @@ cli.raiseErrors = true
 let chai = require('chai')
 chai.use(require('sinon-chai'))
 chai.should()
+
+let nock = require('nock')
+nock.disableNetConnect()
