@@ -12,6 +12,7 @@
   "devDependencies": {
     "chai": "^4.0.2",
     "mocha": "^3.4.2",
+    "mock-stdin": "0.3.1",
     "nock": "^9.0.13",
     "sinon": "^2.3.5",
     "sinon-chai": "^2.8.0",
