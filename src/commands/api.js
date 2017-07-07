@@ -2,8 +2,8 @@
 
 import type {HTTPRequestOptions} from 'http-call'
 import {Command, flags} from 'cli-engine-heroku'
-const {inspect} = require('util')
-const fs = require('fs')
+import {inspect} from 'util'
+import getStdin from 'get-stdin'
 
 export default class API extends Command {
   static topic = 'api'
@@ -55,20 +55,22 @@ Examples:
       request.method = 'GET'
     }
     request.method = request.method.toUpperCase()
+    if (!path.startsWith('/')) path = `/${path}`
     let version = this.flags.version || '3'
     request.headers['accept'] = `application/vnd.heroku+json; version=${version}`
     if (this.flags['accept-inclusion']) {
       request.headers['Accept-Inclusion'] = this.flags['accept-inclusion']
     }
     if (request.method === 'PATCH' || request.method === 'PUT' || request.method === 'POST') {
-      let body = fs.readFileSync('/dev/stdin', 'utf8')
-      let parsedBody
-      try {
-        parsedBody = JSON.parse(body)
-      } catch (e) {
-        throw new Error('Request body must be valid JSON')
+      let body = await getStdin()
+      if (!body) this.out.warn('no stdin provided')
+      else {
+        try {
+          request.body = JSON.parse(body)
+        } catch (e) {
+          throw new Error('Request body must be valid JSON')
+        }
       }
-      request.body = parsedBody
     }
     let response
     try {
