@@ -103,7 +103,7 @@ Received:
 ${inspect(body)}`)
       if (process.stdin.isTTY) {
         this.out.warn(err)
-        return JSON.parse(await edit(body))
+        return JSON.parse(await edit(body, {postfix: '.json'}))
       } else throw new Error(err)
     }
   }
