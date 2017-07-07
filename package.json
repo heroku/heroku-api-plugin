@@ -7,8 +7,6 @@
     "url": "https://github.com/heroku/heroku-api-plugin/issues"
   },
   "dependencies": {
-    "co": "^4.5.4",
-    "co-fs": "^1.2.0",
     "heroku-cli-util": "^6.2.0"
   },
   "devDependencies": {
