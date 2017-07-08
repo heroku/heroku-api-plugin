@@ -7,7 +7,7 @@
 
 ## How to install this plugin
 
-```
+```shell
 $ heroku plugins:install heroku-api-plugin
 ```
 
