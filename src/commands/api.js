@@ -72,24 +72,26 @@ Examples:
     if (request.method === 'PATCH' || request.method === 'PUT' || request.method === 'POST') {
       request.body = await this.getBody()
     }
-    this.out.action.start(color`{cyanBright ${request.method}} ${this.heroku.host}${path}`)
-    let body
-    try {
-      if (request.method === 'GET') {
-        // GET requests must use .get() to paginate
-        body = await this.heroku.get(path, request)
-        this.out.action.stop()
-      } else {
-        let response = await this.heroku.request(path, request)
-        this.out.action.stop(color`{greenBright ${response.response.statusCode}}`)
-        body = response.body
+    const fetch = async (body = []) => {
+      this.out.action.start(color`{cyanBright ${request.method}} ${this.heroku.host}${path}`)
+      let response
+      try {
+        response = await this.heroku.request(path, request)
+      } catch (err) {
+        if (!err.http || !err.http.statusCode) throw err
+        this.out.action.stop(color`{redBright ${err.http.statusCode}}`)
+        throw err
       }
-    } catch (err) {
-      if (!err.http || !err.http.statusCode) throw err
-      this.out.action.stop(color`{redBright ${err.http.statusCode}}`)
-      throw err
+      let msg = color`{greenBright ${response.response.statusCode}}`
+      if (response.body.length) msg += ` ${response.body.length + body.length} items`
+      this.out.action.stop(msg)
+      if (response.response.headers['next-range']) {
+        request.headers['range'] = response.response.headers['next-range']
+        return fetch(body.concat(response.body))
+      }
+      return Array.isArray(response.body) ? body.concat(response.body) : response.body
     }
-
+    let body = await fetch()
     if (typeof body === 'string') {
       this.out.log(body)
     } else {

@@ -91,6 +91,28 @@ describe('GET /apps', () => {
   })
 })
 
+describe('with next-range header', () => {
+  beforeEach(() => {
+    api.get('/apps')
+      .reply(206, [1, 2, 3], {
+        'next-range': '4'
+      })
+      .get('/apps')
+      .matchHeader('range', '4')
+      .reply(206, [4, 5, 6], {
+        'next-range': '7'
+      })
+      .get('/apps')
+      .matchHeader('range', '7')
+      .reply(206, [7, 8, 9])
+  })
+  test('gets next body when next-range is set', async () => {
+    let cmd = await API.mock('GET', '/apps')
+    let app = JSON.parse(cmd.out.stdout.output)[8]
+    expect(app).toEqual(9)
+  })
+})
+
 describe('stdin', () => {
   beforeEach(() => {
     api
