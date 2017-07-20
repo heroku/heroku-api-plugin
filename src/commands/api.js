@@ -73,20 +73,27 @@ Examples:
       request.body = await this.getBody()
     }
     this.out.action.start(color`{cyanBright ${request.method}} ${this.heroku.host}${path}`)
-    let response
+    let body
     try {
-      response = await this.heroku.request(path, request)
+      if (request.method === 'GET') {
+        // GET requests must use .get() to paginate
+        body = await this.heroku.get(path, request)
+        this.out.action.stop()
+      } else {
+        let response = await this.heroku.request(path, request)
+        this.out.action.stop(color`{greenBright ${response.response.statusCode}}`)
+        body = response.body
+      }
     } catch (err) {
       if (!err.http || !err.http.statusCode) throw err
       this.out.action.stop(color`{redBright ${err.http.statusCode}}`)
       throw err
     }
-    this.out.action.stop(color`{greenBright ${response.response.statusCode}}`)
 
-    if (typeof response.body === 'object') {
-      this.out.styledJSON(response.body)
+    if (typeof body === 'string') {
+      this.out.log(body)
     } else {
-      this.out.log(response.body)
+      this.out.styledJSON(body)
     }
   }
 
