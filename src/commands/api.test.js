@@ -15,6 +15,9 @@ afterEach(() => {
   api.done()
 })
 
+const windows = process.platform === 'win32'
+const skipOnWindows = (...args) => windows ? xtest(...args) : test(...args)
+
 test('receiving string', async () => {
   api
     .get('/hello')
@@ -120,7 +123,7 @@ describe('stdin', () => {
       .reply(201, {name: 'myapp'})
   })
 
-  it('POST', async () => {
+  skipOnWindows('POST', async () => {
     // $FlowFixMe
     process.stdin.isTTY = false
     process.nextTick(() => {
