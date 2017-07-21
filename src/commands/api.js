@@ -83,9 +83,9 @@ Examples:
         throw err
       }
       let msg = color`{greenBright ${response.response.statusCode}}`
-      if (response.body.length) msg += ` ${response.body.length + body.length} items`
+      if (Array.isArray(response.body)) msg += ` ${response.body.length + body.length} items`
       this.out.action.stop(msg)
-      if (response.response.headers['next-range']) {
+      if (Array.isArray(response.body) && response.response.headers['next-range']) {
         request.headers['range'] = response.response.headers['next-range']
         return fetch(body.concat(response.body))
       }
