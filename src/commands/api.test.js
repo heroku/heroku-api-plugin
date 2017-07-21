@@ -149,3 +149,20 @@ describe('--body', () => {
     expect(app).toMatchObject({name: 'myapp'})
   })
 })
+
+describe('500 error', () => {
+  beforeEach(() => {
+    api
+      .get('/apps')
+      .reply(500, {message: 'uh oh'})
+  })
+
+  it('errors', async () => {
+    expect.assertions(1)
+    try {
+      await API.mock('GET', '/apps')
+    } catch (err) {
+      expect(err).toMatchObject({message: 'uh oh'})
+    }
+  })
+})
