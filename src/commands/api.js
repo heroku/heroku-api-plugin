@@ -72,21 +72,30 @@ Examples:
     if (request.method === 'PATCH' || request.method === 'PUT' || request.method === 'POST') {
       request.body = await this.getBody()
     }
-    this.out.action.start(color`{cyanBright ${request.method}} ${this.heroku.host}${path}`)
-    let response
-    try {
-      response = await this.heroku.request(path, request)
-    } catch (err) {
-      if (!err.http || !err.http.statusCode) throw err
-      this.out.action.stop(color`{redBright ${err.http.statusCode}}`)
-      throw err
+    const fetch = async (body = []) => {
+      this.out.action.start(color`{cyanBright ${request.method}} ${this.heroku.host}${path}`)
+      let response
+      try {
+        response = await this.heroku.request(path, request)
+      } catch (err) {
+        if (!err.http || !err.http.statusCode) throw err
+        this.out.action.stop(color`{redBright ${err.http.statusCode}}`)
+        throw err
+      }
+      let msg = color`{greenBright ${response.response.statusCode}}`
+      if (Array.isArray(response.body)) msg += ` ${response.body.length + body.length} items`
+      this.out.action.stop(msg)
+      if (Array.isArray(response.body) && response.response.headers['next-range']) {
+        request.headers['range'] = response.response.headers['next-range']
+        return fetch(body.concat(response.body))
+      }
+      return Array.isArray(response.body) ? body.concat(response.body) : response.body
     }
-    this.out.action.stop(color`{greenBright ${response.response.statusCode}}`)
-
-    if (typeof response.body === 'object') {
-      this.out.styledJSON(response.body)
+    let body = await fetch()
+    if (typeof body === 'string') {
+      this.out.log(body)
     } else {
-      this.out.log(response.body)
+      this.out.styledJSON(body)
     }
   }
 

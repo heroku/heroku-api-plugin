@@ -15,6 +15,9 @@ afterEach(() => {
   api.done()
 })
 
+const windows = process.platform === 'win32'
+const skipOnWindows = (...args) => windows ? xtest(...args) : test(...args)
+
 test('receiving string', async () => {
   api
     .get('/hello')
@@ -91,6 +94,28 @@ describe('GET /apps', () => {
   })
 })
 
+describe('with next-range header', () => {
+  beforeEach(() => {
+    api.get('/apps')
+      .reply(206, [1, 2, 3], {
+        'next-range': '4'
+      })
+      .get('/apps')
+      .matchHeader('range', '4')
+      .reply(206, [4, 5, 6], {
+        'next-range': '7'
+      })
+      .get('/apps')
+      .matchHeader('range', '7')
+      .reply(206, [7, 8, 9])
+  })
+  test('gets next body when next-range is set', async () => {
+    let cmd = await API.mock('GET', '/apps')
+    let app = JSON.parse(cmd.out.stdout.output)[8]
+    expect(app).toEqual(9)
+  })
+})
+
 describe('stdin', () => {
   beforeEach(() => {
     api
@@ -98,7 +123,7 @@ describe('stdin', () => {
       .reply(201, {name: 'myapp'})
   })
 
-  it('POST', async () => {
+  skipOnWindows('POST', async () => {
     // $FlowFixMe
     process.stdin.isTTY = false
     process.nextTick(() => {
@@ -122,5 +147,22 @@ describe('--body', () => {
     let cmd = await API.mock('POST', '/apps', '--body', '{"FOO": "bar"}')
     let app = JSON.parse(cmd.out.stdout.output)
     expect(app).toMatchObject({name: 'myapp'})
+  })
+})
+
+describe('500 error', () => {
+  beforeEach(() => {
+    api
+      .get('/apps')
+      .reply(500, {message: 'uh oh'})
+  })
+
+  it('errors', async () => {
+    expect.assertions(1)
+    try {
+      await API.mock('GET', '/apps')
+    } catch (err) {
+      expect(err).toMatchObject({message: 'uh oh'})
+    }
   })
 })
