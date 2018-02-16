@@ -1,8 +1,8 @@
-import {HTTPRequestOptions} from 'http-call'
+import color from '@heroku-cli/color'
 import {Command, flags} from '@heroku-cli/command'
 import cli from 'cli-ux'
+import {HTTPRequestOptions} from 'http-call'
 import {inspect} from 'util'
-import color from '@heroku-cli/color'
 
 export default class API extends Command {
   static description = 'make a manual API request'
@@ -12,8 +12,8 @@ export default class API extends Command {
     body: flags.string({char: 'b', description: 'JSON input body'})
   }
   static args = [
-    {name: 'method', description: 'GET, POST, PUT, PATCH, or DELETE'},
-    {name: 'path', description: 'endpoint to call', optional: true}
+    {name: 'method', description: 'GET, POST, PUT, PATCH, or DELETE', required: true},
+    {name: 'path', description: 'endpoint to call'}
   ]
 
   static help = `The api command is a convenient but low-level way to send requests
@@ -52,7 +52,7 @@ Examples:
     2
 `
 
-  async run () {
+  async run() {
     const {args, flags} = this.parse(API)
     const getBody = async (): Promise<string | undefined> => {
       const getStdin = require('get-stdin')
@@ -65,7 +65,7 @@ Examples:
       }
       try {
         return JSON.parse(body)
-      } catch (e) {
+      } catch {
         let err = new Error(`Request body must be valid JSON
   Received:
   ${inspect(body)}`)
