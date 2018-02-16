@@ -1,12 +1,10 @@
-// @flow
-
-import type {HTTPRequestOptions} from 'http-call'
-import {Command, flags} from 'cli-engine-heroku'
+import {HTTPRequestOptions} from 'http-call'
+import {Command, flags} from '@heroku-cli/command'
+import cli from 'cli-ux'
 import {inspect} from 'util'
-import color from 'heroku-cli-color'
+import color from '@heroku-cli/color'
 
 export default class API extends Command {
-  static topic = 'api'
   static description = 'make a manual API request'
   static flags = {
     version: flags.string({char: 'v', description: 'version to use (e.g. 2, 3, or 3.variant)'}),
@@ -55,69 +53,69 @@ Examples:
 `
 
   async run () {
+    const {args, flags} = this.parse(API)
+    const getBody = async (): Promise<string | undefined> => {
+      const getStdin = require('get-stdin')
+      const edit = require('edit-string')
+
+      let body = flags.body || await getStdin()
+      if (!body) {
+        this.warn('no stdin provided')
+        return
+      }
+      try {
+        return JSON.parse(body)
+      } catch (e) {
+        let err = new Error(`Request body must be valid JSON
+  Received:
+  ${inspect(body)}`)
+        if (process.stdin.isTTY) {
+          this.warn(err)
+          return JSON.parse(await edit(body, {postfix: '.json'}))
+        } else throw err
+      }
+    }
     let request: HTTPRequestOptions = {headers: {}}
-    let path = this.args.path
-    request.method = (this.args.method: any)
+    let path = args.path
+    request.method = args.method
     if (!path) {
       path = request.method
       request.method = 'GET'
     }
-    request.method = request.method.toUpperCase()
+    request.method = request.method!.toUpperCase()
     if (!path.startsWith('/')) path = `/${path}`
-    let version = this.flags.version || '3'
-    request.headers['accept'] = `application/vnd.heroku+json; version=${version}`
-    if (this.flags['accept-inclusion']) {
-      request.headers['Accept-Inclusion'] = this.flags['accept-inclusion']
+    let version = flags.version || '3'
+    request.headers!.accept = `application/vnd.heroku+json; version=${version}`
+    if (flags['accept-inclusion']) {
+      request.headers!['Accept-Inclusion'] = flags['accept-inclusion']
     }
     if (request.method === 'PATCH' || request.method === 'PUT' || request.method === 'POST') {
-      request.body = await this.getBody()
+      request.body = await getBody()
     }
-    const fetch = async (body = []) => {
-      this.out.action.start(color`{cyanBright ${request.method}} ${this.heroku.host}${path}`)
+    const fetch = async (body: any[] = []): Promise<string | any[]> => {
+      cli.action.start(color`{cyanBright ${request.method!}} ${this.heroku.defaults.host!}${path}`)
       let response
       try {
         response = await this.heroku.request(path, request)
       } catch (err) {
         if (!err.http || !err.http.statusCode) throw err
-        this.out.action.stop(color`{redBright ${err.http.statusCode}}`)
+        cli.action.stop(color`{redBright ${err.http.statusCode}}`)
         throw err
       }
-      let msg = color`{greenBright ${response.response.statusCode}}`
+      let msg = color`{greenBright ${response.response!.statusCode!.toString()}}`
       if (Array.isArray(response.body)) msg += ` ${response.body.length + body.length} items`
-      this.out.action.stop(msg)
+      cli.action.stop(msg)
       if (Array.isArray(response.body) && response.response.headers['next-range']) {
-        request.headers['range'] = response.response.headers['next-range']
+        request.headers!.range = response.response.headers['next-range']
         return fetch(body.concat(response.body))
       }
       return Array.isArray(response.body) ? body.concat(response.body) : response.body
     }
     let body = await fetch()
     if (typeof body === 'string') {
-      this.out.log(body)
+      cli.log(body)
     } else {
-      this.out.styledJSON(body)
-    }
-  }
-
-  async getBody (): Promise<?string> {
-    const getStdin = require('get-stdin')
-    const edit = require('edit-string')
-
-    let body = this.flags.body || await getStdin()
-    if (!body) {
-      this.out.warn('no stdin provided')
-      return
-    }
-    try {
-      return JSON.parse(body)
-    } catch (e) {
-      let err = new Error(`Request body must be valid JSON
-Received:
-${inspect(body)}`)
-      if (process.stdin.isTTY) {
-        this.out.warn(err)
-        return JSON.parse(await edit(body, {postfix: '.json'}))
-      } else throw new Error(err)
+      cli.styledJSON(body)
     }
   }
 }
