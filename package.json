@@ -6,9 +6,6 @@
   "bugs": {
     "url": "https://github.com/heroku/heroku-api-plugin/issues"
   },
-  "oclif": {
-    "commands": "./lib/commands"
-  },
   "dependencies": {
     "@heroku-cli/color": "^1.1.3",
     "@heroku-cli/command": "^8.0.0-oclif.2",
@@ -46,10 +43,15 @@
     "heroku-plugin"
   ],
   "license": "ISC",
+  "oclif": {
+    "commands": "./lib/commands"
+  },
   "repository": "heroku/heroku-api-plugin",
   "scripts": {
-    "prepare": "rm -rf lib && tsc",
+    "postpublish": "rm .oclif.manifest.json",
     "posttest": "tslint -p test && tsc --noEmit -p test",
+    "prepare": "rm -rf lib && tsc",
+    "prepublishOnly": "oclif-dev manifest",
     "test": "mocha test/**/*.test.ts"
   }
 }
