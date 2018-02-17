@@ -33,13 +33,10 @@ describe('api', () => {
   .it('--version=v3.foobar')
 
   test
-  .add('api', () => nock('https://api.heroku.com', {
-    reqheaders: {'Accept-Inclusion': 'foobar'}
-  }))
-  .do(({api}) => {
-    api.get('/hello')
+  .nock('https://api.heroku.com', {reqheaders: {'Accept-Inclusion': 'foobar'}}, api => api
+    .get('/hello')
     .reply(200, 'hello!')
-  })
+  )
   .stdout()
   .command(['api', '/hello', '--accept-inclusion=foobar'])
   .it('--accept-inclusion=foobar')
@@ -54,7 +51,7 @@ describe('api', () => {
     .command(['api', '/uhoh'])
     .catch(/FOOBAR/)
     .it('throws error')
-        // expect(err.message).toEqual('HTTP Error 404 for GET https://api.heroku.com:443/uhoh\nuhoh!')
+    // expect(err.message).toEqual('HTTP Error 404 for GET https://api.heroku.com:443/uhoh\nuhoh!')
   })
 
   // describe('GET /apps', () => {
