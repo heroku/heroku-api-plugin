@@ -36,6 +36,7 @@
     "typescript": "^2.7.2"
   },
   "files": [
+    ".oclif.manifest.json",
     "lib"
   ],
   "homepage": "https://github.com/heroku/heroku-api-plugin",
