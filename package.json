@@ -1,7 +1,7 @@
 {
   "name": "heroku-api-plugin",
   "description": "access the Heroku API directly",
-  "version": "2.1.6",
+  "version": "2.1.7",
   "author": "Jeff Dickey @dickeyxxx",
   "bugs": {
     "url": "https://github.com/heroku/heroku-api-plugin/issues"
