@@ -1,9 +1,5 @@
-import Nock from '@fancy-test/nock'
-import base, {expect} from '@oclif/test'
+import {expect, test} from '@oclif/test'
 import * as nock from 'nock'
-
-const test = base
-.register('nock', Nock)
 
 // const windows = process.platform === 'win32'
 // const skipOnWindows = windows ? test.skip : test

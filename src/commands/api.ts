@@ -16,7 +16,7 @@ It is essentially like curl for the Heroku API.
 
 Method name input will be upcased, so both 'heroku api GET /apps' and
 'heroku api get /apps' are valid commands.`
-  static examples = `$ heroku api GET /apps/myapp
+  static examples = [`$ heroku api GET /apps/myapp
 {
   created_at: "2011-11-11T04:17:13-00:00",
   id: "12345678-9abc-def0-1234-456789012345",
@@ -36,7 +36,7 @@ Content-Type: application/x-www-form-urlencoded
 Accept: application/json
 '
 $ printf 'type=web&qty=2' | heroku api POST /apps/myapp/ps/scale
-2`
+2`]
 
   static flags = {
     version: flags.string({char: 'v', description: 'version to use (e.g. 2, 3, or 3.variant)'}),
