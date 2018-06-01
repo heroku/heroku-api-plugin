@@ -36,7 +36,7 @@
     "typescript": "^2.9.1"
   },
   "files": [
-    ".oclif.manifest.json",
+    "oclif.manifest.json",
     "lib"
   ],
   "homepage": "https://github.com/heroku/heroku-api-plugin",
@@ -45,11 +45,12 @@
   ],
   "license": "ISC",
   "oclif": {
+    "bin": "heroku",
     "commands": "./lib/commands"
   },
   "repository": "heroku/heroku-api-plugin",
   "scripts": {
-    "postpublish": "rm .oclif.manifest.json",
+    "postpublish": "rm oclif.manifest.json",
     "posttest": "tslint -p test && tsc --noEmit -p test",
     "prepare": "rm -rf lib && tsc",
     "prepublishOnly": "oclif-dev manifest",
