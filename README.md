@@ -14,15 +14,15 @@ $ heroku plugins:install api
 ## Usage
 
 <!-- commands -->
-* [`@heroku-cli/plugin-api api METHOD [PATH]`](#heroku-cli-plugin-api-api-method-path)
+* [`heroku api METHOD [PATH]`](#heroku-api-method-path)
 
-## `@heroku-cli/plugin-api api METHOD [PATH]`
+## `heroku api METHOD [PATH]`
 
 make a manual API request
 
 ```
 USAGE
-  $ @heroku-cli/plugin-api api METHOD [PATH]
+  $ heroku api METHOD [PATH]
 
 ARGUMENTS
   METHOD  GET, POST, PUT, PATCH, or DELETE
@@ -45,30 +45,29 @@ DESCRIPTION
   Method name input will be upcased, so both 'heroku api GET /apps' and
   'heroku api get /apps' are valid commands.
 
-  Examples:
+EXAMPLE
+  $ heroku api GET /apps/myapp
+  {
+     created_at: "2011-11-11T04:17:13-00:00",
+     id: "12345678-9abc-def0-1234-456789012345",
+     name: "myapp",
+     …
+  }
 
-       $ heroku api GET /apps/myapp
-       {
-         created_at: "2011-11-11T04:17:13-00:00",
-         id: "12345678-9abc-def0-1234-456789012345",
-         name: "myapp",
-         …
-       }
+  $ heroku api PATCH /apps/myapp/config-vars --body '{"FOO": "bar"}'
+  {
+     FOO: "bar"
+     …
+  }
 
-       $ heroku api PATCH /apps/myapp/config-vars --body '{"FOO": "bar"}'
-       {
-         FOO: "bar"
-         …
-       }
-
-       $ export HEROKU_HEADERS
-       $ HEROKU_HEADERS='
-       Content-Type: application/x-www-form-urlencoded
-       Accept: application/json
-       '
-       $ printf 'type=web&qty=2' | heroku api POST /apps/myapp/ps/scale
-       2
+  $ export HEROKU_HEADERS
+  $ HEROKU_HEADERS='
+  Content-Type: application/x-www-form-urlencoded
+  Accept: application/json
+  '
+  $ printf 'type=web&qty=2' | heroku api POST /apps/myapp/ps/scale
+  2
 ```
 
-_See code: [src/commands/api.ts](https://github.com/heroku/heroku-api-plugin/blob/v2.1.9/src/commands/api.ts)_
+_See code: [src/commands/api.ts](https://github.com/heroku/heroku-api-plugin/blob/v2.1.10/src/commands/api.ts)_
 <!-- commandsstop -->
