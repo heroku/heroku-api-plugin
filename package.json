@@ -7,33 +7,33 @@
     "url": "https://github.com/heroku/heroku-api-plugin/issues"
   },
   "dependencies": {
-    "@heroku-cli/color": "^1.1.3",
-    "@heroku-cli/command": "^8.1.15",
-    "@oclif/command": "^1.4.21",
-    "@oclif/config": "^1.6.17",
-    "@oclif/errors": "^1.0.11",
-    "cli-ux": "^4.2.1",
+    "@heroku-cli/color": "^1.1.5",
+    "@heroku-cli/command": "^8.1.23",
+    "@oclif/command": "^1.4.32",
+    "@oclif/config": "^1.6.27",
+    "@oclif/errors": "^1.1.2",
+    "cli-ux": "^4.6.1",
     "edit-string": "1.1.6",
     "fs-extra": "6.0.1",
     "get-stdin": "6.0.0",
-    "http-call": "^5.1.2",
+    "http-call": "^5.1.4",
     "tmp": "0.0.33"
   },
   "devDependencies": {
     "@fancy-test/nock": "^0.1.1",
-    "@oclif/test": "^1.0.6",
-    "@oclif/tslint": "^1.1.1",
+    "@oclif/test": "^1.0.9",
+    "@oclif/tslint": "^1.1.2",
     "@types/chai": "^4.1.3",
-    "@types/mocha": "^5.2.0",
+    "@types/mocha": "^5.2.1",
     "@types/nock": "^9.1.3",
-    "@types/node": "^10.0.6",
+    "@types/node": "^10.3.0",
     "@types/supports-color": "^5.3.0",
     "globby": "^8.0.1",
-    "mocha": "^5.1.1",
-    "nock": "^9.2.5",
-    "ts-node": "^6.0.3",
+    "mocha": "^5.2.0",
+    "nock": "^9.3.0",
+    "ts-node": "^6.0.5",
     "tslint": "^5.10.0",
-    "typescript": "^2.8.3"
+    "typescript": "^2.9.1"
   },
   "files": [
     ".oclif.manifest.json",
@@ -53,6 +53,7 @@
     "posttest": "tslint -p test && tsc --noEmit -p test",
     "prepare": "rm -rf lib && tsc",
     "prepublishOnly": "oclif-dev manifest",
-    "test": "mocha test/**/*.test.ts"
+    "test": "mocha test/**/*.test.ts",
+    "version": "oclif-dev readme && git add README.md"
   }
 }
