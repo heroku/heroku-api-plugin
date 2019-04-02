@@ -1,8 +1,12 @@
 import color from '@heroku-cli/color'
-import {Command, flags} from '@heroku-cli/command'
+import {Command, flags as Flags} from '@heroku-cli/command'
 import cli from 'cli-ux'
 import {HTTPRequestOptions} from 'http-call'
 import {inspect} from 'util'
+
+const tableFlags = cli.table.flags({ only: ['filter', 'sort'] })
+tableFlags.filter.hidden = true
+tableFlags.sort.hidden = true
 
 export default class API extends Command {
   static description = `make a manual API request
@@ -39,9 +43,10 @@ $ printf 'type=web&qty=2' | heroku api POST /apps/myapp/ps/scale
 2`]
 
   static flags = {
-    version: flags.string({char: 'v', description: 'version to use (e.g. 2, 3, or 3.variant)'}),
-    'accept-inclusion': flags.string({char: 'a', description: 'Accept-Inclusion header to use'}),
-    body: flags.string({char: 'b', description: 'JSON input body'})
+    version: Flags.string({char: 'v', description: 'version to use (e.g. 2, 3, or 3.variant)'}),
+    'accept-inclusion': Flags.string({char: 'a', description: 'Accept-Inclusion header to use'}),
+    body: Flags.string({char: 'b', description: 'JSON input body'}),
+    ...tableFlags,
   }
   static args = [
     {name: 'method', description: 'GET, POST, PUT, PATCH, or DELETE', required: true},
@@ -50,27 +55,6 @@ $ printf 'type=web&qty=2' | heroku api POST /apps/myapp/ps/scale
 
   async run() {
     const {args, flags} = this.parse(API)
-    const getBody = async (): Promise<string | undefined> => {
-      const getStdin = require('get-stdin')
-      const edit = require('edit-string')
-
-      let body = flags.body || await getStdin()
-      if (!body) {
-        this.warn('no stdin provided')
-        return
-      }
-      try {
-        return JSON.parse(body)
-      } catch {
-        let err = new Error(`Request body must be valid JSON
-  Received:
-  ${inspect(body)}`)
-        if (process.stdin.isTTY) {
-          this.warn(err)
-          return JSON.parse(await edit(body, {postfix: '.json'}))
-        } else throw err
-      }
-    }
     let request: HTTPRequestOptions = {headers: {}}
     let path = args.path
     request.method = args.method
@@ -86,32 +70,72 @@ $ printf 'type=web&qty=2' | heroku api POST /apps/myapp/ps/scale
       request.headers!['Accept-Inclusion'] = flags['accept-inclusion']
     }
     if (request.method === 'PATCH' || request.method === 'PUT' || request.method === 'POST') {
-      request.body = await getBody()
+      request.body = await this.getBody()
     }
-    const fetch = async (body: any[] = []): Promise<string | any[]> => {
-      cli.action.start(color`{cyanBright ${request.method!}} ${this.heroku.defaults.host!}${path}`)
-      let response
-      try {
-        response = await this.heroku.request<any>(path, request)
-      } catch (err) {
-        if (!err.http || !err.http.statusCode) throw err
-        cli.action.stop(color`{redBright ${err.http.statusCode}}`)
-        throw err
-      }
-      let msg = color`{greenBright ${response.response!.statusCode!.toString()}}`
-      if (Array.isArray(response.body)) msg += ` ${response.body.length + body.length} items`
-      cli.action.stop(msg)
-      if (Array.isArray(response.body) && response.response.headers['next-range']) {
-        request.headers!.range = response.response.headers['next-range']
-        return fetch(body.concat(response.body))
-      }
-      return Array.isArray(response.body) ? body.concat(response.body) : response.body
-    }
-    let body = await fetch()
+
+    let body = await this.fetch(path, request)
     if (typeof body === 'string') {
       cli.log(body)
+    } else if (flags.filter || flags.sort && path.match(`apps`)) {
+      cli.table(
+        body, 
+        {
+          name: {
+            header: "App Name",
+          },
+          stack: {
+            get: row => row.stack && row.stack.name,
+          }
+        }, 
+        {
+          filter: flags.filter,
+          sort: flags.sort,
+        }
+      )
     } else {
       cli.styledJSON(body)
     }
+  }
+
+  private async getBody(body?: string): Promise<string | undefined> {
+    const getStdin = require('get-stdin')
+    const edit = require('edit-string')
+
+    body = body || await getStdin()
+    if (!body) {
+      this.warn('no stdin provided')
+      return
+    }
+    try {
+      return JSON.parse(body)
+    } catch {
+      let err = new Error(`Request body must be valid JSON
+  Received:
+  ${inspect(body)}`)
+      if (process.stdin.isTTY) {
+        this.warn(err)
+        return JSON.parse(await edit(body, { postfix: '.json' }))
+      } else throw err
+    }
+  }
+
+  private async fetch(path: string, request: any, body: any[] = []): Promise<string | any[]>  {
+    cli.action.start(color`{cyanBright ${request.method!}} ${this.heroku.defaults.host!}${path}`)
+    let response
+    try {
+      response = await this.heroku.request<any>(path, request)
+    } catch (err) {
+      if (!err.http || !err.http.statusCode) throw err
+      cli.action.stop(color`{redBright ${err.http.statusCode}}`)
+      throw err
+    }
+    let msg = color`{greenBright ${response.response!.statusCode!.toString()}}`
+    if (Array.isArray(response.body)) msg += ` ${response.body.length + body.length} items`
+    cli.action.stop(msg)
+    if (Array.isArray(response.body) && response.response.headers['next-range']) {
+      request.headers!.range = response.response.headers['next-range']
+      return this.fetch(path, request, body.concat(response.body))
+    }
+    return Array.isArray(response.body) ? body.concat(response.body) : response.body
   }
 }
