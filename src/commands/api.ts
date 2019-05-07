@@ -31,10 +31,10 @@ $ heroku api PATCH /apps/myapp/config-vars --body '{"FOO": "bar"}'
 }
 
 $ export HEROKU_HEADERS
-$ HEROKU_HEADERS='
-Content-Type: application/x-www-form-urlencoded
-Accept: application/json
-'
+$ HEROKU_HEADERS='{
+"Content-Type": "application/x-www-form-urlencoded",
+"Accept": "application/json"
+}'
 $ printf 'type=web&qty=2' | heroku api POST /apps/myapp/ps/scale
 2`]
 
