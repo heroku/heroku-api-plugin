@@ -3,6 +3,7 @@ import {Command, flags} from '@heroku-cli/command'
 import cli from 'cli-ux'
 import {HTTPRequestOptions} from 'http-call'
 import {inspect} from 'util'
+import { URL } from 'url'
 
 export default class API extends Command {
   static description = `make a manual API request
@@ -79,7 +80,7 @@ $ printf 'type=web&qty=2' | heroku api POST /apps/myapp/ps/scale
       request.method = 'GET'
     }
     request.method = request.method!.toUpperCase()
-    if (!path.startsWith('/')) path = `/${path}`
+    const uri = this.parseURL(path)
     let version = flags.version || '3'
     request.headers!.accept = `application/vnd.heroku+json; version=${version}`
     if (flags['accept-inclusion']) {
@@ -89,10 +90,10 @@ $ printf 'type=web&qty=2' | heroku api POST /apps/myapp/ps/scale
       request.body = await getBody()
     }
     const fetch = async (body: any[] = []): Promise<string | any[]> => {
-      cli.action.start(color`{cyanBright ${request.method!}} ${this.heroku.defaults.host!}${path}`)
+      cli.action.start(color`{cyanBright ${request.method!}} ${uri.host!}${uri.pathname}`)
       let response
       try {
-        response = await this.heroku.request<any>(path, request)
+        response = await this.heroku.request<any>(uri.toString(), request)
       } catch (err) {
         if (!err.http || !err.http.statusCode) throw err
         cli.action.stop(color`{redBright ${err.http.statusCode}}`)
@@ -112,6 +113,17 @@ $ printf 'type=web&qty=2' | heroku api POST /apps/myapp/ps/scale
       cli.log(body)
     } else {
       cli.styledJSON(body)
+    }
+  }
+
+  private parseURL(path: string): URL {
+    try {
+      return new URL(path)
+    } catch(err) {
+      const normalizedPath = path.startsWith('/') ? path : `/${path}`
+      const protocol = this.heroku.defaults.protocol || 'https:'
+      const normalizedURL = `${protocol}//${this.heroku.defaults.host!}${normalizedPath}`
+      return new URL(normalizedURL)
     }
   }
 }
