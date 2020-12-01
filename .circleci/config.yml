@@ -16,6 +16,10 @@ jobs:
           node-version: << parameters.node-version >>
           lts: true
           install-yarn: true
+      - node/install-packages:
+          pkg-manager: yarn
+          include-branch-in-cache-key: false
+          override-ci-command: yarn --frozen-lockfile
       - run: yarn
       - run: yarn test
 workflows:
