@@ -8,4 +8,4 @@ jobs:
     steps:
       - checkout
       - run: yarn
-      - run: yarn test && bash <(curl -s https://codecov.io/bash)
+      - run: yarn test

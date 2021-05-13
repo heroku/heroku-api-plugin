@@ -1,7 +1,6 @@
 # API Plugin for Heroku Toolbelt [![Circle CI](https://circleci.com/gh/heroku/heroku-api-plugin/tree/master.svg?style=svg)](https://circleci.com/gh/heroku/heroku-api-plugin/tree/master)
 
 [![npm version](https://badge.fury.io/js/heroku-api-plugin.svg)](http://badge.fury.io/js/heroku-api-plugin)
-[![codecov](https://codecov.io/gh/heroku/heroku-api-plugin/branch/master/graph/badge.svg)](https://codecov.io/gh/heroku/heroku-api-plugin)
 [![CircleCI](https://circleci.com/gh/heroku/heroku-api-plugin/tree/master.svg?style=svg)](https://circleci.com/gh/heroku/heroku-api-plugin/tree/master)
 [![Build status](https://ci.appveyor.com/api/projects/status/9i6wk4i1pe2hsss0/branch/master?svg=true)](https://ci.appveyor.com/project/Heroku/heroku-api-plugin/branch/master)
 
