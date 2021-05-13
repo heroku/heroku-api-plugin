@@ -1,7 +1,7 @@
 ---
-version: 2
+version: 2.1
 jobs:
-  build:
+  test:
     docker:
       - image: dickeyxxx/cli-engine-docker:v1.3.1
     working_directory: ~/cli-plugin
@@ -9,3 +9,7 @@ jobs:
       - checkout
       - run: yarn
       - run: yarn test
+workflows:
+  test:
+    jobs:
+      - test
