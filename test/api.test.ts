@@ -7,8 +7,8 @@ import * as nock from 'nock'
 describe('api', () => {
   test
   .nock('https://api.heroku.com', api => api
-    .get('/hello')
-    .reply(200, 'hello!')
+  .get('/hello')
+  .reply(200, 'hello!'),
   )
   .stdout()
   .command(['api', '/hello'])
@@ -17,7 +17,7 @@ describe('api', () => {
 
   test
   .add('api', () => nock('https://api.heroku.com', {
-    reqheaders: {accept: 'application/vnd.heroku+json; version=3.foobar'}
+    reqheaders: {accept: 'application/vnd.heroku+json; version=3.foobar'},
   }))
   .do(({api}) => {
     api.get('/hello')
@@ -30,8 +30,8 @@ describe('api', () => {
 
   test
   .nock('https://api.heroku.com', {reqheaders: {'Accept-Inclusion': 'foobar'}}, api => api
-    .get('/hello')
-    .reply(200, 'hello!')
+  .get('/hello')
+  .reply(200, 'hello!'),
   )
   .stdout()
   .command(['api', '/hello', '--accept-inclusion=foobar'])
@@ -41,8 +41,8 @@ describe('api', () => {
     test
     .skip()
     .nock('https://api.heroku.com', api => api
-      .get('/uhoh')
-      .reply(404, 'uhoh!')
+    .get('/uhoh')
+    .reply(404, 'uhoh!'),
     )
     .command(['api', '/uhoh'])
     .catch(/FOOBAR/)

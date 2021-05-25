@@ -1,0 +1,10 @@
+{
+  "extends": [
+    "oclif",
+    "oclif-typescript"
+  ],
+  "plugins": ["oclif"],
+  "rules": {
+  },
+  "ignorePatterns": ["lib/**/*"]
+}
