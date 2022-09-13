@@ -1,34 +1,34 @@
----
-version: 2.1
-orbs:
-  node: circleci/node@4.1.0
-jobs:
-  test:
-    parameters:
-      node-version:
-        type: string
-    docker:
-      - image: cimg/base:stable
-    working_directory: ~/cli-plugin
-    steps:
-      - checkout
-      - node/install:
-          node-version: << parameters.node-version >>
-          lts: true
-          install-yarn: true
-      - node/install-packages:
-          pkg-manager: yarn
-          include-branch-in-cache-key: false
-          override-ci-command: yarn --frozen-lockfile
-      - run: yarn
-      - run: yarn test
-workflows:
-  matrix-tests:
-    jobs:
-      - test:
-          matrix:
-            parameters:
-              node-version:
-                - "10"
-                - "12"
-                - "14"
+# ---
+# version: 2.1
+# orbs:
+#   node: circleci/node@4.1.0
+# jobs:
+#   test:
+#     parameters:
+#       node-version:
+#         type: string
+#     docker:
+#       - image: cimg/base:stable
+#     working_directory: ~/cli-plugin
+#     steps:
+#       - checkout
+#       - node/install:
+#           node-version: << parameters.node-version >>
+#           lts: true
+#           install-yarn: true
+#       - node/install-packages:
+#           pkg-manager: yarn
+#           include-branch-in-cache-key: false
+#           override-ci-command: yarn --frozen-lockfile
+#       - run: yarn
+#       - run: yarn test
+# workflows:
+#   matrix-tests:
+#     jobs:
+#       - test:
+#           matrix:
+#             parameters:
+#               node-version:
+#                 - "10"
+#                 - "12"
+#                 - "14"
