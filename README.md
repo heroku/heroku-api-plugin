@@ -70,3 +70,4 @@ EXAMPLE
 
 _See code: [src/commands/api.ts](https://github.com/heroku/heroku-api-plugin/blob/v2.2.0/src/commands/api.ts)_
 <!-- commandsstop -->
+test
