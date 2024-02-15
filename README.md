@@ -7,7 +7,7 @@
 ## How to install this plugin
 
 ```shell
-$ heroku plugins:install api
+$ heroku plugins:install @heroku-cli/plugin-api
 ```
 
 ## Usage
