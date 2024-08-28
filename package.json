@@ -22,20 +22,19 @@
     "http-call": "^5.3.0"
   },
   "devDependencies": {
-    "@fancy-test/nock": "^0.1.1",
-    "@oclif/test": "^1.0.9",
-    "@types/chai": "^4.1.3",
-    "@types/mocha": "^5.2.1",
-    "@types/nock": "^9.1.3",
-    "@types/node": "^14.4.0",
+    "@types/chai": "^4.3.14",
+    "@oclif/test": "^1.2.4",
+    "@types/mocha": "^10.0.6",
+    "@types/node": "16.11.7",
     "@types/supports-color": "^5.3.0",
+    "chai": "^4.4.1",
     "eslint": "^7.0.0",
     "eslint-config-oclif": "^3.1.0",
     "eslint-config-oclif-typescript": "^0.2.0",
     "eslint-plugin-oclif": "^0.1.0",
     "globby": "^8.0.1",
-    "mocha": "^5.2.0",
-    "nock": "^9.3.0",
+    "mocha": "^10.4.0",
+    "nock": "^13.5.1",
     "ts-node": "^9.0.0",
     "typescript": "3.8.3"
   },
@@ -48,6 +47,16 @@
     "heroku-plugin"
   ],
   "license": "ISC",
+  "mocha": {
+    "require": [
+      "ts-node/register",
+      "source-map-support/register"
+    ],
+    "watch-extensions": "ts",
+    "recursive": true,
+    "reporter": "spec",
+    "timeout": 360000
+  },
   "oclif": {
     "bin": "heroku",
     "commands": "./lib/commands"
