@@ -7,7 +7,7 @@
     "url": "https://github.com/heroku/heroku-api-plugin/issues"
   },
   "engines": {
-    "node": ">= 10.0"
+    "node": ">= 16.0"
   },
   "dependencies": {
     "@heroku-cli/color": "^1.1.14",
