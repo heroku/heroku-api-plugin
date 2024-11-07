@@ -22,7 +22,7 @@
     "http-call": "^5.3.0"
   },
   "devDependencies": {
-    "@oclif/test": "^1.2.4",
+    "@oclif/test": "^3.2.15",
     "@types/chai": "^4.3.14",
     "@types/mocha": "^10.0.6",
     "@types/node": "16.11.7",
