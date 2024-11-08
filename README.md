@@ -21,18 +21,19 @@ make a manual API request
 
 ```
 USAGE
-  $ heroku api METHOD [PATH]
+  $ heroku api METHOD [PATH] [-v <value>] [-a <value>] [-b <value>]
 
 ARGUMENTS
   METHOD  GET, POST, PUT, PATCH, or DELETE
   PATH    endpoint to call
 
-OPTIONS
-  -a, --accept-inclusion=accept-inclusion  Accept-Inclusion header to use
-  -b, --body=body                          JSON input body
-  -v, --version=version                    version to use (e.g. 2, 3, or 3.variant)
+FLAGS
+  -a, --accept-inclusion=<value>  Accept-Inclusion header to use
+  -b, --body=<value>              JSON input body
+  -v, --version=<value>           version to use (e.g. 2, 3, or 3.variant)
 
 DESCRIPTION
+  make a manual API request
   The api command is a convenient but low-level way to send requests
   to the Heroku API. It sends an HTTP request to the Heroku API
   using the given method on the given path. For methods PUT, PATCH,
@@ -44,21 +45,19 @@ DESCRIPTION
   Method name input will be upcased, so both 'heroku api GET /apps' and
   'heroku api get /apps' are valid commands.
 
-EXAMPLE
+EXAMPLES
   $ heroku api GET /apps/myapp
   {
-     created_at: "2011-11-11T04:17:13-00:00",
-     id: "12345678-9abc-def0-1234-456789012345",
-     name: "myapp",
-     …
+    created_at: "2011-11-11T04:17:13-00:00",
+    id: "12345678-9abc-def0-1234-456789012345",
+    name: "myapp",
+    …
   }
-
   $ heroku api PATCH /apps/myapp/config-vars --body '{"FOO": "bar"}'
   {
-     FOO: "bar"
-     …
+    FOO: "bar"
+    …
   }
-
   $ export HEROKU_HEADERS
   $ HEROKU_HEADERS='{
   "Content-Type": "application/x-www-form-urlencoded",
@@ -68,5 +67,5 @@ EXAMPLE
   2
 ```
 
-_See code: [src/commands/api.ts](https://github.com/heroku/heroku-api-plugin/blob/v2.2.0/src/commands/api.ts)_
+_See code: [src/commands/api.ts](https://github.com/heroku/heroku-api-plugin/blob/v2.3.0/src/commands/api.ts)_
 <!-- commandsstop -->
