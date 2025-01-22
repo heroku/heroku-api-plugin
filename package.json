@@ -7,7 +7,7 @@
     "url": "https://github.com/heroku/heroku-api-plugin/issues"
   },
   "engines": {
-    "node": "20.17.0"
+    "node": ">=20"
   },
   "dependencies": {
     "@heroku/http-call": "^5.4.0",
