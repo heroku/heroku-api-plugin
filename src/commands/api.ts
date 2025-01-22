@@ -1,11 +1,25 @@
-import color from '@heroku-cli/color'
+import {color} from '@heroku-cli/color'
 import {Command, flags} from '@heroku-cli/command'
-import cli from 'cli-ux'
+import {Args, ux} from '@oclif/core'
 import {HTTPRequestOptions} from 'http-call'
-import {inspect} from 'util'
+import heredoc from 'tsheredoc'
 import {URL} from 'url'
+import {inspect} from 'util'
+
+import getStdin = require('get-stdin')
+const edit = require('edit-string')
 
 export default class API extends Command {
+  static args = {
+    method: Args.string({
+      description: 'GET, POST, PUT, PATCH, or DELETE',
+      required: true,
+    }),
+    path: Args.string({
+      description: 'endpoint to call',
+    }),
+  }
+
   static description = `make a manual API request
 The api command is a convenient but low-level way to send requests
 to the Heroku API. It sends an HTTP request to the Heroku API
@@ -18,52 +32,53 @@ It is essentially like curl for the Heroku API.
 Method name input will be upcased, so both 'heroku api GET /apps' and
 'heroku api get /apps' are valid commands.`
 
-  static examples = [`$ heroku api GET /apps/myapp
-{
-  created_at: "2011-11-11T04:17:13-00:00",
-  id: "12345678-9abc-def0-1234-456789012345",
-  name: "myapp",
-  …
-}
-
-$ heroku api PATCH /apps/myapp/config-vars --body '{"FOO": "bar"}'
-{
-  FOO: "bar"
-  …
-}
-
-$ export HEROKU_HEADERS
-$ HEROKU_HEADERS='{
-"Content-Type": "application/x-www-form-urlencoded",
-"Accept": "application/json"
-}'
-$ printf 'type=web&qty=2' | heroku api POST /apps/myapp/ps/scale
-2`]
+  static examples = [heredoc`
+    $ heroku api GET /apps/myapp
+    {
+      created_at: "2011-11-11T04:17:13-00:00",
+      id: "12345678-9abc-def0-1234-456789012345",
+      name: "myapp",
+      …
+    }
+  `, heredoc`
+    $ heroku api PATCH /apps/myapp/config-vars --body '{"FOO": "bar"}'
+    {
+      FOO: "bar"
+      …
+    }
+    `, heredoc`
+    $ printf '{"updates":[{"type":"web", "quantity":2}]}' | heroku api POST /apps/myapp/formation
+    [
+      {
+        "app": {
+          "name": "myapp",
+          "id": "01234567-89ab-cdef-0123-456789abcdef"
+        },
+        "quantity": 2,
+        "type": "web",
+        "updated_at": "2012-01-01T12:00:00Z"
+        ...
+      }
+    ]
+    `]
 
   static flags = {
-    version: flags.string({char: 'v', description: 'version to use (e.g. 2, 3, or 3.variant)'}),
     'accept-inclusion': flags.string({char: 'a', description: 'Accept-Inclusion header to use'}),
     body: flags.string({char: 'b', description: 'JSON input body'}),
+    version: flags.string({char: 'v', description: 'version to use (e.g. 2, 3, or 3.variant)'}),
   }
 
-  static args = [
-    {name: 'method', description: 'GET, POST, PUT, PATCH, or DELETE', required: true},
-    {name: 'path', description: 'endpoint to call'},
-  ]
-
   async run() {
-    const {args, flags} = this.parse(API)
+    const {args, flags} = await this.parse(API)
     const getBody = async (): Promise<string | undefined> => {
-      const getStdin = require('get-stdin')
-      const edit = require('edit-string')
-
       const body = flags.body || await getStdin()
       if (!body) {
         this.warn('no stdin provided')
         return
       }
+
       try {
-        return JSON.parse(body)
+        return JSON.parse(body as string)
       } catch {
         const err = new Error(`Request body must be valid JSON
   Received:
@@ -72,16 +87,19 @@ $ printf 'type=web&qty=2' | heroku api POST /apps/myapp/ps/scale
           this.warn(err)
           return JSON.parse(await edit(body, {postfix: '.json'}))
         }
+
         throw err
       }
     }
+
     const request: HTTPRequestOptions = {headers: {}}
-    let path = args.path
-    request.method = args.method
+    let {method, path} = args
+    request.method = method
     if (!path) {
       path = request.method
       request.method = 'GET'
     }
+
     request.method = request.method!.toUpperCase()
     const uri = this.parseURL(path)
     const version = flags.version || '3'
@@ -89,41 +107,45 @@ $ printf 'type=web&qty=2' | heroku api POST /apps/myapp/ps/scale
     if (flags['accept-inclusion']) {
       request.headers!['Accept-Inclusion'] = flags['accept-inclusion']
     }
+
     if (request.method === 'PATCH' || request.method === 'PUT' || request.method === 'POST') {
-      // eslint-disable-next-line require-atomic-updates
       request.body = await getBody()
     }
-    const fetch = async (body: any[] = []): Promise<string | any[]> => {
-      cli.action.start(color`{cyanBright ${request.method!}} ${uri.host!}${uri.pathname}`)
+
+    const fetch = async (body: unknown[] = []): Promise<string | unknown | unknown[]> => {
+      ux.action.start(color`{cyanBright ${request.method!}} ${uri.host!}${uri.pathname}`)
       let response
       try {
-        response = await this.heroku.request<any>(uri.toString(), request)
+        response = await this.heroku.request<unknown>(uri.toString(), request)
       } catch (error) {
         if (!error.http || !error.http.statusCode) throw error
-        cli.action.stop(color`{redBright ${error.http.statusCode}}`)
+        ux.action.stop(color`{redBright ${error.http.statusCode}}`)
         throw error
       }
+
       let msg = color`{greenBright ${response.response!.statusCode!.toString()}}`
       if (Array.isArray(response.body)) msg += ` ${response.body.length + body.length} items`
-      cli.action.stop(msg)
+      ux.action.stop(msg)
       if (Array.isArray(response.body) && response.response.headers['next-range']) {
-        request.headers!.range = response.response.headers['next-range']
-        return fetch(body.concat(response.body))
+        request.headers!.range = response.response.headers['next-range'] as string
+        return fetch([...body, ...response.body])
       }
-      return Array.isArray(response.body) ? body.concat(response.body) : response.body
+
+      return Array.isArray(response.body) ? [...body, ...response.body] : response.body
     }
+
     const body = await fetch()
     if (typeof body === 'string') {
-      cli.log(body)
+      ux.log(body)
     } else {
-      cli.styledJSON(body)
+      ux.styledJSON(body)
     }
   }
 
   private parseURL(path: string): URL {
     try {
       return new URL(path)
-    } catch (error) {
+    } catch {
       const normalizedPath = path.startsWith('/') ? path : `/${path}`
       const protocol = this.heroku.defaults.protocol || 'https:'
       const normalizedURL = `${protocol}//${this.heroku.defaults.host!}${normalizedPath}`
