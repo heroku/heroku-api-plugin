@@ -21,7 +21,7 @@ make a manual API request
 
 ```
 USAGE
-  $ heroku api METHOD [PATH] [-v <value>] [-a <value>] [-b <value>]
+  $ heroku api METHOD [PATH] [-a <value>] [-b <value>] [-v <value>]
 
 ARGUMENTS
   METHOD  GET, POST, PUT, PATCH, or DELETE
@@ -53,18 +53,26 @@ EXAMPLES
     name: "myapp",
     …
   }
+
   $ heroku api PATCH /apps/myapp/config-vars --body '{"FOO": "bar"}'
   {
     FOO: "bar"
     …
   }
-  $ export HEROKU_HEADERS
-  $ HEROKU_HEADERS='{
-  "Content-Type": "application/x-www-form-urlencoded",
-  "Accept": "application/json"
-  }'
-  $ printf 'type=web&qty=2' | heroku api POST /apps/myapp/ps/scale
-  2
+
+  $ printf '{"updates":[{"type":"web", "quantity":2}]}' | heroku api POST /apps/myapp/formation
+  [
+    {
+      "app": {
+        "name": "myapp",
+        "id": "01234567-89ab-cdef-0123-456789abcdef"
+      },
+      "quantity": 2,
+      "type": "web",
+      "updated_at": "2012-01-01T12:00:00Z"
+      ...
+    }
+  ]
 ```
 
 _See code: [src/commands/api.ts](https://github.com/heroku/heroku-api-plugin/blob/v2.3.0/src/commands/api.ts)_

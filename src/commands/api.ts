@@ -2,6 +2,7 @@ import {color} from '@heroku-cli/color'
 import {Command, flags} from '@heroku-cli/command'
 import {Args, ux} from '@oclif/core'
 import {HTTPRequestOptions} from 'http-call'
+import heredoc from 'tsheredoc'
 import {URL} from 'url'
 import {inspect} from 'util'
 
@@ -31,27 +32,35 @@ It is essentially like curl for the Heroku API.
 Method name input will be upcased, so both 'heroku api GET /apps' and
 'heroku api get /apps' are valid commands.`
 
-  static examples = [`$ heroku api GET /apps/myapp
-{
-  created_at: "2011-11-11T04:17:13-00:00",
-  id: "12345678-9abc-def0-1234-456789012345",
-  name: "myapp",
-  …
-}
-
-$ heroku api PATCH /apps/myapp/config-vars --body '{"FOO": "bar"}'
-{
-  FOO: "bar"
-  …
-}
-
-$ export HEROKU_HEADERS
-$ HEROKU_HEADERS='{
-"Content-Type": "application/x-www-form-urlencoded",
-"Accept": "application/json"
-}'
-$ printf 'type=web&qty=2' | heroku api POST /apps/myapp/ps/scale
-2`]
+  static examples = [heredoc`
+    $ heroku api GET /apps/myapp
+    {
+      created_at: "2011-11-11T04:17:13-00:00",
+      id: "12345678-9abc-def0-1234-456789012345",
+      name: "myapp",
+      …
+    }
+  `, heredoc`
+    $ heroku api PATCH /apps/myapp/config-vars --body '{"FOO": "bar"}'
+    {
+      FOO: "bar"
+      …
+    }
+    `, heredoc`
+    $ printf '{"updates":[{"type":"web", "quantity":2}]}' | heroku api POST /apps/myapp/formation
+    [
+      {
+        "app": {
+          "name": "myapp",
+          "id": "01234567-89ab-cdef-0123-456789abcdef"
+        },
+        "quantity": 2,
+        "type": "web",
+        "updated_at": "2012-01-01T12:00:00Z"
+        ...
+      }
+    ]
+    `]
 
   static flags = {
     'accept-inclusion': flags.string({char: 'a', description: 'Accept-Inclusion header to use'}),
