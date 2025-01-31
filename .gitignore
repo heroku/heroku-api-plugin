@@ -2,3 +2,5 @@ lib
 node_modules
 .idea
 oclif.manifest.json
+.DS_STORE
+.nyc_output
