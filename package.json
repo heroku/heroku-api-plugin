@@ -12,7 +12,7 @@
   "dependencies": {
     "@heroku/http-call": "^5.4.0",
     "@heroku-cli/color": "^1.1.14",
-    "@heroku-cli/command": "^11.4.0",
+    "@heroku-cli/command": "^12.0.1",
     "@oclif/core": "^2.16.0",
     "edit-string": "^1.1.6",
     "fs-extra": "^9.0.1",
