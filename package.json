@@ -1,7 +1,7 @@
 {
   "name": "@heroku-cli/plugin-api",
   "description": "access the Heroku API directly",
-  "version": "2.3.0",
+  "version": "3.0.0",
   "author": "Heroku",
   "bugs": {
     "url": "https://github.com/heroku/heroku-api-plugin/issues"
@@ -48,16 +48,6 @@
     "heroku-plugin"
   ],
   "license": "ISC",
-  "mocha": {
-    "require": [
-      "ts-node/register",
-      "source-map-support/register"
-    ],
-    "watch-extensions": "ts",
-    "recursive": true,
-    "reporter": "spec",
-    "timeout": 360000
-  },
   "oclif": {
     "bin": "heroku",
     "commands": "./lib/commands"
@@ -74,7 +64,7 @@
     "prepare": "yarn build",
     "prepack": "yarn build && oclif manifest",
     "pretest": "yarn build && oclif manifest",
-    "test": "nyc mocha test/**/*.test.ts",
+    "test": "nyc mocha --config .mocharc.json test/**/*.test.ts",
     "version": "oclif readme && git add README.md"
   }
 }

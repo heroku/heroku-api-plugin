@@ -1,5 +1,4 @@
 import {expect, test} from '@oclif/test'
-import * as nock from 'nock'
 
 describe('api', () => {
   test
@@ -23,13 +22,12 @@ describe('api', () => {
     .it('adds leading slash')
 
   test
-    .add('api', () => nock('https://api.heroku.com', {
+    .nock('https://api.heroku.com', {
       reqheaders: {accept: 'application/vnd.heroku+json; version=3.foobar'},
-    }))
-    .do(({api}) => {
-      api.get('/hello')
-        .reply(200, 'hello!')
-    })
+    }, api => api
+      .get('/hello')
+      .reply(200, 'hello!'),
+    )
     .stdout()
     .command(['api', '/hello', '--version=3.foobar'])
     .do(({stdout}) => expect(stdout).to.equal('hello!\n'))
