@@ -6,6 +6,7 @@
   "bugs": {
     "url": "https://github.com/heroku/heroku-api-plugin/issues"
   },
+  "type": "commonjs",
   "engines": {
     "node": ">=20"
   },
