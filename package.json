@@ -16,7 +16,7 @@
     "@oclif/core": "^2.16.0",
     "edit-string": "^1.1.6",
     "fs-extra": "^9.0.1",
-    "get-stdin": "8.0.0",
+    "get-stdin": "9.0.0",
     "http-call": "^5.3.0",
     "tsheredoc": "^1.0.1"
   },
