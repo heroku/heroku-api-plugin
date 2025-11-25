@@ -54,7 +54,7 @@
   },
   "repository": "heroku/heroku-api-plugin",
   "resolutions": {
-    "isbinaryfile": "4.0.10"
+    "tmp": "0.2.5"
   },
   "scripts": {
     "build": "rm -rf lib && tsc",
