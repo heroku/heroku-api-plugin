@@ -40,4 +40,3 @@ jobs:
 
       - name: Update release configs
         uses: ./workflows-repo/.github/actions/update-release-configs-job-public
-
