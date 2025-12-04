@@ -27,7 +27,7 @@ on:
 
 jobs:
   validate:
-    runs-on: ubuntu-latest
+    runs-on: pub-hk-ubuntu-24.04-ip
     steps:
       - uses: actions/checkout@v4
 
@@ -49,7 +49,7 @@ jobs:
 
   release-please-pr:
     needs: validate
-    runs-on: ubuntu-latest
+    runs-on: pub-hk-ubuntu-24.04-ip
     permissions:
       contents: write
       pull-requests: write
@@ -86,7 +86,7 @@ jobs:
   publish:
     needs: release-please-pr
     if: needs.release-please-pr.result == 'success' && (needs.release-please-pr.outputs.pr_number != '' || needs.release-please-pr.outputs.pr_already_exists == 'true')
-    runs-on: ubuntu-latest
+    runs-on: pub-hk-ubuntu-24.04-ip
     permissions:
       contents: write
       pull-requests: write
