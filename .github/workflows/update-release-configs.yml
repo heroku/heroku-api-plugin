@@ -23,7 +23,7 @@ on:
 
 jobs:
   update-configs:
-    runs-on: ubuntu-latest
+    runs-on: pub-hk-ubuntu-24.04-ip
     permissions:
       contents: write
       pull-requests: write
@@ -40,4 +40,3 @@ jobs:
 
       - name: Update release configs
         uses: ./workflows-repo/.github/actions/update-release-configs-job-public
-
