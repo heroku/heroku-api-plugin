@@ -53,5 +53,5 @@
     }
   },
   "$schema": "https://raw.githubusercontent.com/googleapis/release-please/main/schemas/config.json",
-  "bootstrap-sha": "1c5473cbf60231b73b4140ab4571fc2207f64c68"
+  "bootstrap-sha": "f04cc3464d2b2b6d724642fa580aa15351bce61d"
 }
