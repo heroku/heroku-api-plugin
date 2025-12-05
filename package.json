@@ -1,7 +1,7 @@
 {
   "name": "@heroku-cli/plugin-api",
   "description": "access the Heroku API directly",
-  "version": "3.0.1",
+  "version": "4.0.0",
   "author": "Heroku",
   "bugs": {
     "url": "https://github.com/heroku/heroku-api-plugin/issues"
