@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.0.3](https://github.com/heroku/heroku-api-plugin/compare/plugin-api-v3.0.2...plugin-api-v3.0.3) (2026-01-29)
+
+
+### Bug Fixes
+
+* **deps:** bump lodash from 4.17.21 to 4.17.23 ([#151](https://github.com/heroku/heroku-api-plugin/issues/151)) ([a5b6786](https://github.com/heroku/heroku-api-plugin/commit/a5b6786160b6c8023b07a0ce2a9ed28ba028fb3e))
+
 ## [3.0.2](https://github.com/heroku/heroku-api-plugin/compare/plugin-api-v3.0.1...plugin-api-v3.0.2) (2025-12-05)
 
 
