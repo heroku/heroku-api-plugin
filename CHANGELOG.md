@@ -1,5 +1,15 @@
 # Changelog
 
+## [3.0.4](https://github.com/heroku/heroku-api-plugin/compare/plugin-api-v3.0.3...plugin-api-v3.0.4) (2026-04-22)
+
+
+### Bug Fixes
+
+* address high security vulns reported by Dependabot ([#162](https://github.com/heroku/heroku-api-plugin/issues/162)) ([d04e480](https://github.com/heroku/heroku-api-plugin/commit/d04e4803292919eeef9d081fe82dad095a124841))
+* **deps:** bump flatted from 3.3.4 to 3.4.2 ([#166](https://github.com/heroku/heroku-api-plugin/issues/166)) ([e6eece4](https://github.com/heroku/heroku-api-plugin/commit/e6eece4a797b2ca1a2ab7ac568b4a94f6067ef13))
+* **deps:** bump lodash from 4.17.23 to 4.18.1 ([#167](https://github.com/heroku/heroku-api-plugin/issues/167)) ([1ac29cc](https://github.com/heroku/heroku-api-plugin/commit/1ac29cc3601ff3811c01811f974889585884f766))
+* **deps:** bump the patch-dependencies group across 1 directory with 3 updates ([#155](https://github.com/heroku/heroku-api-plugin/issues/155)) ([26b59c2](https://github.com/heroku/heroku-api-plugin/commit/26b59c209bb226605c92f34d283be17c07d00f19))
+
 ## [3.0.3](https://github.com/heroku/heroku-api-plugin/compare/plugin-api-v3.0.2...plugin-api-v3.0.3) (2026-01-29)
 
 
