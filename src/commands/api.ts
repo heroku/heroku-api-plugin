@@ -1,13 +1,14 @@
-import {color} from '@heroku-cli/color'
 import {Command, flags} from '@heroku-cli/command'
-import {Args, ux} from '@oclif/core'
-import {HTTPRequestOptions} from 'http-call'
-import heredoc from 'tsheredoc'
-import {URL} from 'url'
-import {inspect} from 'util'
+import * as color from '@heroku/heroku-cli-util/color'
+import {HTTPError, type HTTPRequestOptions} from '@heroku/http-call'
+import {Args} from '@oclif/core'
+import {ux} from '@oclif/core/ux'
+import getStdin from 'get-stdin'
+import {URL} from 'node:url'
+import {inspect} from 'node:util'
+import tsheredoc from 'tsheredoc'
 
-import getStdin = require('get-stdin')
-const edit = require('edit-string')
+const heredoc = tsheredoc.default ?? tsheredoc
 
 export default class API extends Command {
   static args = {
@@ -19,7 +20,6 @@ export default class API extends Command {
       description: 'endpoint to call',
     }),
   }
-
   static description = `make a manual API request
 The api command is a convenient but low-level way to send requests
 to the Heroku API. It sends an HTTP request to the Heroku API
@@ -31,8 +31,7 @@ It is essentially like curl for the Heroku API.
 
 Method name input will be upcased, so both 'heroku api GET /apps' and
 'heroku api get /apps' are valid commands.`
-
-  static examples = [heredoc`
+  static examples = [heredoc(`
     $ heroku api GET /apps/myapp
     {
       created_at: "2011-11-11T04:17:13-00:00",
@@ -40,13 +39,13 @@ Method name input will be upcased, so both 'heroku api GET /apps' and
       name: "myapp",
       …
     }
-  `, heredoc`
+  `), heredoc(`
     $ heroku api PATCH /apps/myapp/config-vars --body '{"FOO": "bar"}'
     {
       FOO: "bar"
       …
     }
-    `, heredoc`
+  `), heredoc(`
     $ printf '{"updates":[{"type":"web", "quantity":2}]}' | heroku api POST /apps/myapp/formation
     [
       {
@@ -60,8 +59,7 @@ Method name input will be upcased, so both 'heroku api GET /apps' and
         ...
       }
     ]
-    `]
-
+  `)]
   static flags = {
     'accept-inclusion': flags.string({char: 'a', description: 'Accept-Inclusion header to use'}),
     body: flags.string({char: 'b', description: 'JSON input body'}),
@@ -70,7 +68,7 @@ Method name input will be upcased, so both 'heroku api GET /apps' and
 
   async run() {
     const {args, flags} = await this.parse(API)
-    const getBody = async (): Promise<string | undefined> => {
+    const getBody = async (): Promise<unknown> => {
       const body = flags.body || await getStdin()
       if (!body) {
         this.warn('no stdin provided')
@@ -85,6 +83,7 @@ Method name input will be upcased, so both 'heroku api GET /apps' and
   ${inspect(body)}`)
         if (process.stdin.isTTY) {
           this.warn(err)
+          const {default: edit} = await import('edit-string') as any
           return JSON.parse(await edit(body, {postfix: '.json'}))
         }
 
@@ -113,17 +112,19 @@ Method name input will be upcased, so both 'heroku api GET /apps' and
     }
 
     const fetch = async (body: unknown[] = []): Promise<string | unknown | unknown[]> => {
-      ux.action.start(color`{cyanBright ${request.method!}} ${uri.host!}${uri.pathname}`)
+      ux.action.start(`${color.cyan(request.method!)} ${uri.host!}${uri.pathname}`)
       let response
       try {
         response = await this.heroku.request<unknown>(uri.toString(), request)
       } catch (error) {
-        if (!error.http || !error.http.statusCode) throw error
-        ux.action.stop(color`{redBright ${error.http.statusCode}}`)
+        if (error instanceof HTTPError) {
+          ux.action.stop(color.red(String(error.statusCode)))
+        }
+
         throw error
       }
 
-      let msg = color`{greenBright ${response.response!.statusCode!.toString()}}`
+      let msg = color.green(response.response!.statusCode!.toString())
       if (Array.isArray(response.body)) msg += ` ${response.body.length + body.length} items`
       ux.action.stop(msg)
       if (Array.isArray(response.body) && response.response.headers['next-range']) {
@@ -136,9 +137,9 @@ Method name input will be upcased, so both 'heroku api GET /apps' and
 
     const body = await fetch()
     if (typeof body === 'string') {
-      ux.log(body)
+      ux.stdout(body)
     } else {
-      ux.styledJSON(body)
+      ux.stdout(ux.colorizeJson(body))
     }
   }
 
