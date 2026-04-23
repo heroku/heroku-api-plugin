@@ -77,8 +77,14 @@ describe('api', function () {
   })
 
   it('throws error for invalid JSON body', async function () {
-    const {error} = await runCommand(API, ['POST', '/apps/myapp/config-vars', '--body', 'not-json'])
-    expect(error?.message).to.contain('Request body must be valid JSON')
+    const originalIsTTY = process.stdin.isTTY
+    process.stdin.isTTY = false as any
+    try {
+      const {error} = await runCommand(API, ['POST', '/apps/myapp/config-vars', '--body', 'not-json'])
+      expect(error?.message).to.contain('Request body must be valid JSON')
+    } finally {
+      process.stdin.isTTY = originalIsTTY
+    }
   })
 
   it('uses GET when only path is provided', async function () {

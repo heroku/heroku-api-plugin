@@ -1,5 +1,5 @@
 import {Command, flags} from '@heroku-cli/command'
-import {type HTTPRequestOptions} from '@heroku/http-call'
+import {HTTPError, type HTTPRequestOptions} from '@heroku/http-call'
 import {Args} from '@oclif/core'
 import {ux} from '@oclif/core/ux'
 import ansis from 'ansis'
@@ -71,7 +71,7 @@ Method name input will be upcased, so both 'heroku api GET /apps' and
 
   async run() {
     const {args, flags} = await this.parse(API)
-    const getBody = async (): Promise<string | undefined> => {
+    const getBody = async (): Promise<unknown> => {
       const body = flags.body || await getStdin()
       if (!body) {
         this.warn('no stdin provided')
@@ -119,9 +119,11 @@ Method name input will be upcased, so both 'heroku api GET /apps' and
       let response
       try {
         response = await this.heroku.request<unknown>(uri.toString(), request)
-      } catch (error: any) {
-        if (!error.http || !error.http.statusCode) throw error
-        ux.action.stop(ansis.redBright(String(error.http.statusCode)))
+      } catch (error) {
+        if (error instanceof HTTPError) {
+          ux.action.stop(ansis.redBright(String(error.statusCode)))
+        }
+
         throw error
       }
 
