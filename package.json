@@ -51,11 +51,8 @@
   "scripts": {
     "build": "rm -rf dist && tsc && oclif manifest && oclif readme",
     "lint": "eslint .",
-    "postpublish": "rm oclif.manifest.json",
     "posttest": "npm run lint",
     "prepare": "npm run build",
-    "prepack": "npm run build",
-    "pretest": "npm run build",
     "test": "c8 mocha --forbid-only \"test/**/*.test.ts\"",
     "version": "oclif readme && git add README.md"
   },
