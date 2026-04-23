@@ -5,8 +5,7 @@ export default [
   {
     ignores: [
       './dist',
-      './lib',
-      '**/*.js',
+      'coverage/**/*',
       'workflows-repo/**/*',
     ],
   },

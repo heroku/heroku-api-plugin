@@ -2,11 +2,13 @@
   "extends": "../tsconfig",
   "compilerOptions": {
     "sourceMap": true,
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true
+    "rootDirs": ["./", "../src"]
   },
   "include": [
     "./**/*",
     "../src/**/*"
-  ]
+  ],
+  "ts-node": {
+    "transpileOnly": true
+  }
 }
