@@ -59,12 +59,18 @@ describe('api', function () {
   })
 
   it('warns when no body is provided for POST', async function () {
-    nock('https://api.heroku.com')
-    .post('/apps/myapp/config-vars')
-    .reply(200, {ok: true})
+    const originalIsTTY = process.stdin.isTTY
+    Object.defineProperty(process.stdin, 'isTTY', {configurable: true, value: true})
+    try {
+      nock('https://api.heroku.com')
+      .post('/apps/myapp/config-vars')
+      .reply(200, {ok: true})
 
-    const {stderr} = await runCommand(API, ['POST', '/apps/myapp/config-vars'])
-    expect(stderr).to.contain('no stdin provided')
+      const {stderr} = await runCommand(API, ['POST', '/apps/myapp/config-vars'])
+      expect(stderr).to.contain('no stdin provided')
+    } finally {
+      Object.defineProperty(process.stdin, 'isTTY', {configurable: true, value: originalIsTTY})
+    }
   })
 
   it('sends body with PUT method', async function () {
@@ -78,12 +84,12 @@ describe('api', function () {
 
   it('throws error for invalid JSON body', async function () {
     const originalIsTTY = process.stdin.isTTY
-    process.stdin.isTTY = false as any
+    Object.defineProperty(process.stdin, 'isTTY', {configurable: true, value: false})
     try {
       const {error} = await runCommand(API, ['POST', '/apps/myapp/config-vars', '--body', 'not-json'])
       expect(error?.message).to.contain('Request body must be valid JSON')
     } finally {
-      process.stdin.isTTY = originalIsTTY
+      Object.defineProperty(process.stdin, 'isTTY', {configurable: true, value: originalIsTTY})
     }
   })
 
