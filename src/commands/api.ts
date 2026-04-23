@@ -20,7 +20,6 @@ export default class API extends Command {
       description: 'endpoint to call',
     }),
   }
-
   static description = `make a manual API request
 The api command is a convenient but low-level way to send requests
 to the Heroku API. It sends an HTTP request to the Heroku API
@@ -32,7 +31,6 @@ It is essentially like curl for the Heroku API.
 
 Method name input will be upcased, so both 'heroku api GET /apps' and
 'heroku api get /apps' are valid commands.`
-
   static examples = [heredoc(`
     $ heroku api GET /apps/myapp
     {
@@ -62,7 +60,6 @@ Method name input will be upcased, so both 'heroku api GET /apps' and
       }
     ]
   `)]
-
   static flags = {
     'accept-inclusion': flags.string({char: 'a', description: 'Accept-Inclusion header to use'}),
     body: flags.string({char: 'b', description: 'JSON input body'}),

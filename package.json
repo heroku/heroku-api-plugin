@@ -60,6 +60,7 @@
     "version": "oclif readme && git add README.md"
   },
   "type": "module",
+  "//overrides": "serialize-javascript: mocha transitive dep, pinned for CVE-2024-11831",
   "overrides": {
     "serialize-javascript": "^7.0.5"
   }

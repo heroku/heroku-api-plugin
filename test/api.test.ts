@@ -11,8 +11,8 @@ describe('api', function () {
 
   it('receives string', async function () {
     nock('https://api.heroku.com')
-      .get('/hello')
-      .reply(200, 'hello!')
+    .get('/hello')
+    .reply(200, 'hello!')
 
     const {stdout} = await runCommand(API, ['/hello'])
     expect(stdout).to.contain('hello!')
@@ -20,8 +20,8 @@ describe('api', function () {
 
   it('adds leading slash', async function () {
     nock('https://api.heroku.com')
-      .get('/hello')
-      .reply(200, 'hello!')
+    .get('/hello')
+    .reply(200, 'hello!')
 
     const {stdout} = await runCommand(API, ['hello'])
     expect(stdout).to.contain('hello!')
@@ -31,8 +31,8 @@ describe('api', function () {
     nock('https://api.heroku.com', {
       reqheaders: {accept: 'application/vnd.heroku+json; version=3.foobar'},
     })
-      .get('/hello')
-      .reply(200, 'hello!')
+    .get('/hello')
+    .reply(200, 'hello!')
 
     const {stdout} = await runCommand(API, ['/hello', '--version=3.foobar'])
     expect(stdout).to.contain('hello!')
@@ -42,16 +42,16 @@ describe('api', function () {
     nock('https://api.heroku.com', {
       reqheaders: {'Accept-Inclusion': 'foobar'},
     })
-      .get('/hello')
-      .reply(200, 'hello!')
+    .get('/hello')
+    .reply(200, 'hello!')
 
     await runCommand(API, ['/hello', '--accept-inclusion=foobar'])
   })
 
   it('sends JSON body with --body flag on POST', async function () {
     nock('https://api.heroku.com')
-      .post('/apps/myapp/config-vars', {FOO: 'bar'})
-      .reply(200, {FOO: 'bar'})
+    .post('/apps/myapp/config-vars', {FOO: 'bar'})
+    .reply(200, {FOO: 'bar'})
 
     const {stdout} = await runCommand(API, ['POST', '/apps/myapp/config-vars', '--body', '{"FOO": "bar"}'])
     expect(stdout).to.contain('FOO')
@@ -60,8 +60,8 @@ describe('api', function () {
 
   it('warns when no body is provided for POST', async function () {
     nock('https://api.heroku.com')
-      .post('/apps/myapp/config-vars')
-      .reply(200, {ok: true})
+    .post('/apps/myapp/config-vars')
+    .reply(200, {ok: true})
 
     const {stderr} = await runCommand(API, ['POST', '/apps/myapp/config-vars'])
     expect(stderr).to.contain('no stdin provided')
@@ -69,8 +69,8 @@ describe('api', function () {
 
   it('sends body with PUT method', async function () {
     nock('https://api.heroku.com')
-      .put('/apps/myapp/config-vars', {FOO: 'baz'})
-      .reply(200, {FOO: 'baz'})
+    .put('/apps/myapp/config-vars', {FOO: 'baz'})
+    .reply(200, {FOO: 'baz'})
 
     const {stdout} = await runCommand(API, ['PUT', '/apps/myapp/config-vars', '--body', '{"FOO": "baz"}'])
     expect(stdout).to.contain('FOO')
@@ -89,8 +89,8 @@ describe('api', function () {
 
   it('uses GET when only path is provided', async function () {
     nock('https://api.heroku.com')
-      .get('/apps')
-      .reply(200, [{name: 'myapp'}])
+    .get('/apps')
+    .reply(200, [{name: 'myapp'}])
 
     const {stdout} = await runCommand(API, ['/apps'])
     expect(stdout).to.contain('myapp')
@@ -98,8 +98,8 @@ describe('api', function () {
 
   it('throws error when it receives an error response', async function () {
     nock('https://api.heroku.com')
-      .get('/uhoh')
-      .reply(404, 'uhoh!')
+    .get('/uhoh')
+    .reply(404, 'uhoh!')
 
     const {error} = await runCommand(API, ['/uhoh'])
     expect(error?.message).to.contain('HTTP Error 404 for GET https://api.heroku.com/uhoh')
@@ -107,14 +107,14 @@ describe('api', function () {
 
   it('gets next body when next-range is set', async function () {
     nock('https://api.heroku.com')
-      .get('/hello')
-      .reply(206, [1, 2, 3], {'next-range': '4'})
-      .get('/hello')
-      .matchHeader('range', '4')
-      .reply(206, [4, 5, 6], {'next-range': '7'})
-      .get('/hello')
-      .matchHeader('range', '7')
-      .reply(206, [7, 8, 9])
+    .get('/hello')
+    .reply(206, [1, 2, 3], {'next-range': '4'})
+    .get('/hello')
+    .matchHeader('range', '4')
+    .reply(206, [4, 5, 6], {'next-range': '7'})
+    .get('/hello')
+    .matchHeader('range', '7')
+    .reply(206, [7, 8, 9])
 
     const {stdout} = await runCommand(API, ['/hello'])
     for (const n of [1, 2, 3, 4, 5, 6, 7, 8, 9]) {

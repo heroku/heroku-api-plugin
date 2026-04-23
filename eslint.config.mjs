@@ -43,4 +43,10 @@ export default [
       'unicorn/prefer-number-properties': 'warn',
     },
   },
+  {
+    files: ['test/**/*.ts'],
+    rules: {
+      'prefer-arrow-callback': 'off',
+    },
+  },
 ]

@@ -1,6 +1,9 @@
-dist
-node_modules
-.idea
+*-debug.log
+*-error.log
+**/.DS_Store
+/.idea
+/dist
+/node_modules
+/tmp
 oclif.manifest.json
-.DS_STORE
 coverage
