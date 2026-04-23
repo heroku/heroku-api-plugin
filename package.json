@@ -13,7 +13,7 @@
     "@heroku-cli/command": "13.0.0-beta.1",
     "@heroku/http-call": "^5.4.0",
     "@oclif/core": "^4.3.0",
-    "ansis": "^4",
+    "@heroku/heroku-cli-util": "^10.8.0",
     "edit-string": "^1.1.6",
     "get-stdin": "^10.0.0",
     "tsheredoc": "^1.0.1"
@@ -49,13 +49,13 @@
   },
   "repository": "heroku/heroku-api-plugin",
   "scripts": {
-    "build": "rm -rf dist && tsc",
+    "build": "rm -rf dist && tsc && oclif manifest && oclif readme",
     "lint": "eslint .",
     "postpublish": "rm oclif.manifest.json",
     "posttest": "npm run lint",
     "prepare": "npm run build",
-    "prepack": "npm run build && oclif manifest",
-    "pretest": "npm run build && oclif manifest",
+    "prepack": "npm run build",
+    "pretest": "npm run build",
     "test": "c8 mocha --forbid-only \"test/**/*.test.ts\"",
     "version": "oclif readme && git add README.md"
   },

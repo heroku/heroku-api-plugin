@@ -1,8 +1,8 @@
 import {Command, flags} from '@heroku-cli/command'
+import * as color from '@heroku/heroku-cli-util/color'
 import {HTTPError, type HTTPRequestOptions} from '@heroku/http-call'
 import {Args} from '@oclif/core'
 import {ux} from '@oclif/core/ux'
-import ansis from 'ansis'
 import getStdin from 'get-stdin'
 import {URL} from 'node:url'
 import {inspect} from 'node:util'
@@ -112,19 +112,19 @@ Method name input will be upcased, so both 'heroku api GET /apps' and
     }
 
     const fetch = async (body: unknown[] = []): Promise<string | unknown | unknown[]> => {
-      ux.action.start(`${ansis.cyanBright(request.method!)} ${uri.host!}${uri.pathname}`)
+      ux.action.start(`${color.cyan(request.method!)} ${uri.host!}${uri.pathname}`)
       let response
       try {
         response = await this.heroku.request<unknown>(uri.toString(), request)
       } catch (error) {
         if (error instanceof HTTPError) {
-          ux.action.stop(ansis.redBright(String(error.statusCode)))
+          ux.action.stop(color.red(String(error.statusCode)))
         }
 
         throw error
       }
 
-      let msg = ansis.greenBright(response.response!.statusCode!.toString())
+      let msg = color.green(response.response!.statusCode!.toString())
       if (Array.isArray(response.body)) msg += ` ${response.body.length + body.length} items`
       ux.action.stop(msg)
       if (Array.isArray(response.body) && response.response.headers['next-range']) {

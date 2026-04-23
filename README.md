@@ -21,16 +21,19 @@ make a manual API request
 
 ```
 USAGE
-  $ heroku api METHOD [PATH] [-a <value>] [-b <value>] [-v <value>]
+  $ heroku api METHOD [PATH] [--prompt] [-a <value>] [-b <value>] [-v <value>]
 
 ARGUMENTS
   METHOD  GET, POST, PUT, PATCH, or DELETE
-  PATH    endpoint to call
+  [PATH]  endpoint to call
 
 FLAGS
   -a, --accept-inclusion=<value>  Accept-Inclusion header to use
   -b, --body=<value>              JSON input body
   -v, --version=<value>           version to use (e.g. 2, 3, or 3.variant)
+
+GLOBAL FLAGS
+  --prompt  interactively prompt for command arguments and flags
 
 DESCRIPTION
   make a manual API request
@@ -75,5 +78,5 @@ EXAMPLES
   ]
 ```
 
-_See code: [src/commands/api.ts](https://github.com/heroku/heroku-api-plugin/blob/v3.0.1/src/commands/api.ts)_
+_See code: [src/commands/api.ts](https://github.com/heroku/heroku-api-plugin/blob/v3.0.4/src/commands/api.ts)_
 <!-- commandsstop -->
