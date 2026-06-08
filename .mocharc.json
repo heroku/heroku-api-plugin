@@ -1,8 +1,0 @@
-{
-  "require": ["tsx", "test/helpers/init.mjs"],
-  "watch-extensions": ["ts"],
-  "recursive": true,
-  "reporter": "spec",
-  "timeout": 360000,
-  "node-option": ["import=tsx/esm"]
-}

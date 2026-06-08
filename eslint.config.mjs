@@ -1,7 +1,9 @@
-import oclif from 'eslint-config-oclif'
+import herokuEslintConfig from '@heroku-cli/test-utils/eslint-config'
+import vitestEslintConfig from '@heroku-cli/test-utils/eslint-config/vitest'
 
 export default [
-  ...oclif,
+  ...herokuEslintConfig,
+  ...vitestEslintConfig,
   {
     ignores: [
       './dist',
@@ -31,7 +33,6 @@ export default [
       '@typescript-eslint/no-require-imports': 'warn',
       camelcase: 'off',
       'import/namespace': 'warn',
-      'mocha/no-mocha-arrows': 'warn',
       'n/shebang': 'warn',
       'node/no-missing-import': 'off',
       'perfectionist/sort-imports': 'warn',
@@ -41,12 +42,6 @@ export default [
       'unicorn/no-useless-undefined': 'warn',
       'unicorn/prefer-node-protocol': 'warn',
       'unicorn/prefer-number-properties': 'warn',
-    },
-  },
-  {
-    files: ['test/**/*.ts'],
-    rules: {
-      'prefer-arrow-callback': 'off',
     },
   },
 ]

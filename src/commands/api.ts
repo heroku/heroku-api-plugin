@@ -83,8 +83,8 @@ Method name input will be upcased, so both 'heroku api GET /apps' and
   ${inspect(body)}`)
         if (process.stdin.isTTY) {
           this.warn(err)
-          const {default: edit} = await import('edit-string') as any
-          return JSON.parse(await edit(body, {postfix: '.json'}))
+          const {editAsync} = await import('@inquirer/external-editor')
+          return JSON.parse(await editAsync(body as string, {postfix: '.json'}))
         }
 
         throw err
