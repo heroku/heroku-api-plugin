@@ -27,6 +27,7 @@
     "eslint-plugin-vitest": "^0.5.4",
     "nock": "^14.0.1",
     "oclif": "^4.23.4",
+    "tsx": "^4.21.0",
     "typescript": "^5.9.3",
     "vitest": "^4.1.8"
   },
