@@ -1,5 +1,22 @@
 # Changelog
 
+## [4.0.0](https://github.com/heroku/heroku-api-plugin/compare/plugin-api-v3.0.4...plugin-api-v4.0.0) (2026-06-08)
+
+
+### ⚠ BREAKING CHANGES
+
+* migrate to ESM, oclif v4, dist build, and npm ([#173](https://github.com/heroku/heroku-api-plugin/issues/173))
+
+### Features
+
+* migrate to ESM, oclif v4, dist build, and npm ([#173](https://github.com/heroku/heroku-api-plugin/issues/173)) ([68980ba](https://github.com/heroku/heroku-api-plugin/commit/68980ba2bba232a3cd920cbb94d9e6e24cd32057))
+
+
+### Dependencies
+
+* bump brace-expansion from 5.0.5 to 5.0.6 ([#176](https://github.com/heroku/heroku-api-plugin/issues/176)) ([147f925](https://github.com/heroku/heroku-api-plugin/commit/147f925762c9d146fd50ffcff5f4fd4dde22426a))
+* bump ws from 8.20.0 to 8.21.0 ([#177](https://github.com/heroku/heroku-api-plugin/issues/177)) ([d0e5d70](https://github.com/heroku/heroku-api-plugin/commit/d0e5d70c0b02c1369e699f2e480c7db861355257))
+
 ## [3.0.4](https://github.com/heroku/heroku-api-plugin/compare/plugin-api-v3.0.3...plugin-api-v3.0.4) (2026-04-22)
 
 
