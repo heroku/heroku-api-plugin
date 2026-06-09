@@ -1,5 +1,12 @@
 # Changelog
 
+## [4.0.1](https://github.com/heroku/heroku-api-plugin/compare/plugin-api-v4.0.0...plugin-api-v4.0.1) (2026-06-09)
+
+
+### Dependencies
+
+* updating cli command to the latest stable version ([#182](https://github.com/heroku/heroku-api-plugin/issues/182)) ([34d4828](https://github.com/heroku/heroku-api-plugin/commit/34d48289d700019f4629a1d0ef88b34e86125174))
+
 ## [4.0.0](https://github.com/heroku/heroku-api-plugin/compare/plugin-api-v3.0.4...plugin-api-v4.0.0) (2026-06-08)
 
 
