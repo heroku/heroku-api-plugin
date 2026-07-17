@@ -1,5 +1,13 @@
 # Changelog
 
+## [4.0.2](https://github.com/heroku/heroku-api-plugin/compare/plugin-api-v4.0.1...plugin-api-v4.0.2) (2026-07-17)
+
+
+### Dependencies
+
+* bump @heroku-cli/command from 12.3.3 to 13.0.1 ([#181](https://github.com/heroku/heroku-api-plugin/issues/181)) ([65a711b](https://github.com/heroku/heroku-api-plugin/commit/65a711b7b9653223b4ec41151f1fc9275738b19c))
+* bump esbuild and tsx ([#184](https://github.com/heroku/heroku-api-plugin/issues/184)) ([15eb661](https://github.com/heroku/heroku-api-plugin/commit/15eb661f808308e0e539d1bdf2d8e0e0c957ae35))
+
 ## [4.0.1](https://github.com/heroku/heroku-api-plugin/compare/plugin-api-v4.0.0...plugin-api-v4.0.1) (2026-06-09)
 
 
