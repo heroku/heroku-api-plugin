@@ -27,6 +27,7 @@
     "eslint-plugin-vitest": "^0.5.4",
     "nock": "^14.0.1",
     "oclif": "^4.23.4",
+    "rimraf": "^6.1.3",
     "tsx": "^4.21.0",
     "typescript": "^5.9.3",
     "vitest": "^4.1.8"
@@ -46,17 +47,18 @@
   },
   "repository": "heroku/heroku-api-plugin",
   "scripts": {
-    "build": "rm -rf dist && tsc && oclif manifest && oclif readme",
+    "clean": "rimraf dist",
+    "build": "npm run clean && tsc",
+    "manifest": "oclif manifest",
+    "readme": "oclif readme",
     "lint": "eslint .",
-    "postpublish": "rm -f oclif.manifest.json",
-    "posttest": "npm run lint",
-    "prepare": "npm run build",
-    "test": "vitest run --coverage",
-    "version": "oclif readme && git add README.md"
+    "lint:fix": "eslint . --fix",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage --coverage.reporter=text-summary --coverage.reporter=lcovonly",
+    "docs:generate": "npm run build && npm run manifest && oclif readme --output-dir docs --multi",
+    "prepare": "npm run build && npm run manifest",
+    "postpack": "rimraf oclif.manifest.json"
   },
-  "type": "module",
-  "//overrides": "serialize-javascript: mocha transitive dep, pinned for CVE-2024-11831",
-  "overrides": {
-    "serialize-javascript": "^7.0.5"
-  }
+  "type": "module"
 }
