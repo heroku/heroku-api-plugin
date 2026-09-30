@@ -42,6 +42,7 @@
   ],
   "license": "ISC",
   "oclif": {
+    "repositoryPrefix": "<%- repo %>/blob/plugin-api-v<%- version %>/<%- commandPath %>",
     "bin": "heroku",
     "commands": "./dist/commands"
   },
