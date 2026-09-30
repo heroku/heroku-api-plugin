@@ -78,5 +78,5 @@ EXAMPLES
   ]
 ```
 
-_See code: [src/commands/api.ts](https://github.com/heroku/heroku-api-plugin/blob/v4.0.0/src/commands/api.ts)_
+_See code: [src/commands/api.ts](https://github.com/heroku/heroku-api-plugin/blob/plugin-api-v4.0.2/src/commands/api.ts)_
 <!-- commandsstop -->
