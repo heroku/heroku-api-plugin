@@ -1,5 +1,12 @@
 # Changelog
 
+## [4.0.3](https://github.com/heroku/heroku-api-plugin/compare/plugin-api-v4.0.2...plugin-api-v4.0.3) (2026-10-01)
+
+
+### Bug Fixes
+
+* correct broken source links in generated command docs ([#196](https://github.com/heroku/heroku-api-plugin/issues/196)) ([bb11cf3](https://github.com/heroku/heroku-api-plugin/commit/bb11cf38d8a50165dbed4dbc49bf99ac2c760f01))
+
 ## [4.0.2](https://github.com/heroku/heroku-api-plugin/compare/plugin-api-v4.0.1...plugin-api-v4.0.2) (2026-07-17)
 
 
