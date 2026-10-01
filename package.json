@@ -20,7 +20,7 @@
   },
   "devDependencies": {
     "@heroku-cli/test-utils": "^0.3.0",
-    "@types/node": "22.15.21",
+    "@types/node": "25.9.2",
     "@vitest/coverage-v8": "^4.1.8",
     "eslint": "^9.39.4",
     "eslint-config-oclif": "^6.0.144",
