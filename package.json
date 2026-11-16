@@ -23,7 +23,7 @@
     "@types/node": "25.9.2",
     "@vitest/coverage-v8": "^4.1.8",
     "eslint": "^9.39.4",
-    "eslint-config-oclif": "^6.0.144",
+    "eslint-config-oclif": "^7.1.10",
     "eslint-plugin-vitest": "^0.5.4",
     "nock": "^14.0.1",
     "oclif": "^4.23.4",
