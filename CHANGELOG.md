@@ -1,5 +1,12 @@
 # Changelog
 
+## [4.0.4](https://github.com/heroku/heroku-api-plugin/compare/plugin-api-v4.0.3...plugin-api-v4.0.4) (2026-11-18)
+
+
+### Dependencies
+
+* bump fast-xml-parser and @aws-sdk/xml-builder ([#210](https://github.com/heroku/heroku-api-plugin/issues/210)) ([05d5e82](https://github.com/heroku/heroku-api-plugin/commit/05d5e82453d18b5ca3e381fc052ed7b5c8ef1a5a))
+
 ## [4.0.3](https://github.com/heroku/heroku-api-plugin/compare/plugin-api-v4.0.2...plugin-api-v4.0.3) (2026-10-01)
 
 
