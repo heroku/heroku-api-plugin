@@ -78,4 +78,4 @@ EXAMPLES
   ]
 ```
 
-_See code: [src/commands/api.ts](https://github.com/heroku/heroku-api-plugin/blob/plugin-api-v4.0.3/src/commands/api.ts)_
+_See code: [src/commands/api.ts](https://github.com/heroku/heroku-api-plugin/blob/plugin-api-v4.0.4/src/commands/api.ts)_
